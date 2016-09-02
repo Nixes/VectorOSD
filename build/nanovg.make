@@ -153,8 +153,6 @@ endif
 
 OBJECTS := \
 	$(OBJDIR)/nanovg.o \
-	$(OBJDIR)/perf.o \
-	$(OBJDIR)/VectorOSD.o \
 
 RESOURCES := \
 
@@ -215,14 +213,6 @@ $(GCH): $(PCH)
 endif
 
 $(OBJDIR)/nanovg.o: ../src/nanovg.c
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/perf.o: ../src/perf.c
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/VectorOSD.o: ../src/VectorOSD.c
 	@echo $(notdir $<)
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 
