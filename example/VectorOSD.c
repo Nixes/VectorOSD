@@ -40,7 +40,6 @@ int premult = 0;
 int main()
 {
 	GLFWwindow* window;
-	DemoData data;
 	NVGcontext* vg = NULL;
 	PerfGraph fps;
 	double prevt = 0;
@@ -56,9 +55,7 @@ int main()
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-#ifdef DEMO_MSAA
-	glfwWindowHint(GLFW_SAMPLES, 4);
-#endif
+
 
 	window = glfwCreateWindow(1000, 600, "NanoVG", NULL, NULL);
 //	window = glfwCreateWindow(1000, 600, "NanoVG", glfwGetPrimaryMonitor(), NULL);
@@ -66,8 +63,6 @@ int main()
 		glfwTerminate();
 		return -1;
 	}
-
-	glfwSetKeyCallback(window, key);
 
 	glfwMakeContextCurrent(window);
 #ifdef NANOVG_GLEW
@@ -86,9 +81,6 @@ int main()
 		printf("Could not init nanovg.\n");
 		return -1;
 	}
-
-	if (loadDemoData(vg, &data) == -1)
-		return -1;
 
 	glfwSwapInterval(0);
 
@@ -123,22 +115,13 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
 
 		nvgBeginFrame(vg, winWidth, winHeight, pxRatio);
-
-		renderDemo(vg, mx,my, winWidth,winHeight, t, blowup, &data);
-		renderGraph(vg, 5,5, &fps);
+		// render some things here
 
 		nvgEndFrame(vg);
-
-		if (screenshot) {
-			screenshot = 0;
-			saveScreenShot(fbWidth, fbHeight, premult, "dump.png");
-		}
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-
-	freeDemoData(vg, &data);
 
 	nvgDeleteGL2(vg);
 
