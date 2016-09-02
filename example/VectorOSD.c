@@ -37,6 +37,14 @@ int screenshot = 0;
 int premult = 0;
 
 
+//actually render the image
+void render(NVGcontext* vg) {
+	nvgBeginPath(vg);
+	nvgRect(vg, 100,100, 120,30);
+	nvgFillColor(vg, nvgRGBA(255,192,0,255));
+	nvgFill(vg);
+}
+
 int main()
 {
 	GLFWwindow* window;
@@ -57,7 +65,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
 
-	window = glfwCreateWindow(1000, 600, "NanoVG", NULL, NULL);
+	window = glfwCreateWindow(1000, 600, "VectorOSD", NULL, NULL);
 //	window = glfwCreateWindow(1000, 600, "NanoVG", glfwGetPrimaryMonitor(), NULL);
 	if (!window) {
 		glfwTerminate();
@@ -115,7 +123,10 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
 
 		nvgBeginFrame(vg, winWidth, winHeight, pxRatio);
+
 		// render some things here
+		render(vg);
+		//
 
 		nvgEndFrame(vg);
 
