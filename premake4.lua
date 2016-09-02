@@ -21,6 +21,15 @@ solution "nanovg"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "Optimize", "ExtraWarnings"}
+            
+        configuration "Debug"		
+            defines { "DEBUG" }		
+            flags { "Symbols", "ExtraWarnings"}		
+        
+        configuration "Release"		
+            defines { "NDEBUG" }		
+            flags { "Optimize", "ExtraWarnings"}		
+    
 
 project "VectorOSD"
 
