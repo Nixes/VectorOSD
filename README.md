@@ -30,6 +30,10 @@ Install glfw
 pacman -S mingw-w64-x86_64-glfw
 ```
 
+If you want to update build scripts, Run
+```
+./premake4 gmake
+```
 
 Build
 ```
