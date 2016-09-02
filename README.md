@@ -35,7 +35,9 @@ If you want to update build scripts, Run
 ./premake4 gmake
 ```
 
-Build
+
+
+Build (make sure you use the "MinGW-w64 Win64 Shell" since we installed the 64bit packages)
 ```
 cd VectorOSD/build
 make
