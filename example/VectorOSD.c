@@ -1,24 +1,6 @@
-//
-// Copyright (c) 2013 Mikko Mononen memon@inside.org
-//
-// This software is provided 'as-is', without any express or implied
-// warranty.  In no event will the authors be held liable for any damages
-// arising from the use of this software.
-// Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it
-// freely, subject to the following restrictions:
-// 1. The origin of this software must not be misrepresented; you must not
-//    claim that you wrote the original software. If you use this software
-//    in a product, an acknowledgment in the product documentation would be
-//    appreciated but is not required.
-// 2. Altered source versions must be plainly marked as such, and must not be
-//    misrepresented as being the original software.
-// 3. This notice may not be removed or altered from any source distribution.
-//
-
 #include <stdio.h>
 #ifdef NANOVG_GLEW
-#  include <GL/glew.h>
+	#include <GL/glew.h>
 #endif
 #include <GLFW/glfw3.h>
 #include "nanovg.h"
@@ -27,8 +9,7 @@
 #include "perf.h"
 
 
-void errorcb(int error, const char* desc)
-{
+void errorcb(int error, const char* desc) {
 	printf("GLFW error %d: %s\n", error, desc);
 }
 
@@ -36,6 +17,16 @@ int blowup = 0;
 int screenshot = 0;
 int premult = 0;
 
+void renderNumber(NVGcontext* vg, float x, float y,int number) {
+	char number_string[15];
+	sprintf(number_string, "%d", number);
+
+	nvgFontSize(vg, 20.0f);
+	nvgFontFace(vg, "sans");
+	nvgFillColor(vg, nvgRGBA(255,255,255,255));
+	nvgTextAlign(vg,NVG_ALIGN_LEFT|NVG_ALIGN_MIDDLE);
+	nvgText(vg, x, y, number_string, NULL);
+}
 
 void renderText(NVGcontext* vg, float x, float y,const char* text) {
 	nvgFontSize(vg, 20.0f);
@@ -56,8 +47,7 @@ void render(NVGcontext* vg) {
 	nvgFill(vg);
 }
 
-int main()
-{
+int main() {
 	GLFWwindow* window;
 	NVGcontext* vg = NULL;
 	PerfGraph fps;
@@ -84,30 +74,33 @@ int main()
 	}
 
 	glfwMakeContextCurrent(window);
-#ifdef NANOVG_GLEW
-    if(glewInit() != GLEW_OK) {
-		printf("Could not init glew.\n");
-		return -1;
-	}
-#endif
+	#ifdef NANOVG_GLEW
+	  if(glewInit() != GLEW_OK) {
+			printf("Could not init glew.\n");
+			return -1;
+		}
+	#endif
 
-#ifdef DEMO_MSAA
-	vg = nvgCreateGL2(NVG_STENCIL_STROKES | NVG_DEBUG);
-#else
-	vg = nvgCreateGL2(NVG_ANTIALIAS | NVG_STENCIL_STROKES | NVG_DEBUG);
-#endif
-	if (vg == NULL) {
-		printf("Could not init nanovg.\n");
-		return -1;
-	}
+	#ifdef DEMO_MSAA
+		vg = nvgCreateGL2(NVG_STENCIL_STROKES | NVG_DEBUG);
+	#else
+		vg = nvgCreateGL2(NVG_ANTIALIAS | NVG_STENCIL_STROKES | NVG_DEBUG);
+	#endif
+		if (vg == NULL) {
+			printf("Could not init nanovg.\n");
+			return -1;
+		}
 
 	glfwSwapInterval(0);
 
 	glfwSetTime(0);
 	prevt = glfwGetTime();
 
-	while (!glfwWindowShouldClose(window))
-	{
+	// load font
+	nvgCreateFont(vg, "sans", "../example/Roboto-Regular.ttf");
+	int frameNo = 0;
+
+	while (!glfwWindowShouldClose(window)) {
 		double mx, my, t, dt;
 		int winWidth, winHeight;
 		int fbWidth, fbHeight;
@@ -133,13 +126,13 @@ int main()
 			glClearColor(0.3f, 0.3f, 0.32f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
 
-		// load font
-		nvgCreateFont(vg, "sans", "../example/Roboto-Regular.ttf");
-
 		nvgBeginFrame(vg, winWidth, winHeight, pxRatio);
 
 		// render some things here
 		render(vg);
+
+			renderNumber(vg,20,20,frameNo);
+			frameNo++;
 		//
 
 		nvgEndFrame(vg);
