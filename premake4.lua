@@ -21,22 +21,14 @@ solution "nanovg"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "Optimize", "ExtraWarnings"}
-            
-        configuration "Debug"		
-            defines { "DEBUG" }		
-            flags { "Symbols", "ExtraWarnings"}		
-        
-        configuration "Release"		
-            defines { "NDEBUG" }		
-            flags { "Optimize", "ExtraWarnings"}		
     
 
-project "VectorOSD"
+    project "VectorOSD"
 
 		kind "ConsoleApp"
 			language "C"
 			files { "src/VectorOSD.c", "example/demo.c", "src/perf.c" }
-			includedirs { "src" }
+			includedirs { "src", "example" }
 			targetdir("build")
 			links { "nanovg" }
 
