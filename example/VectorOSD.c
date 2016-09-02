@@ -14,8 +14,23 @@ void errorcb(int error, const char* desc) {
 }
 
 int blowup = 0;
-int screenshot = 0;
 int premult = 0;
+
+void renderBootLogBox() {
+
+}
+
+void runBootCheck() {
+
+}
+
+void renderBatteryBar(NVGcontext* vg) {
+
+}
+
+void renderAttitudeIndicator(NVGcontext* vg) {
+
+}
 
 void renderNumber(NVGcontext* vg, float x, float y,int number) {
 	char number_string[15];
@@ -45,6 +60,16 @@ void render(NVGcontext* vg) {
 	nvgRect(vg, 100,100, 120,30);
 	nvgFillColor(vg, nvgRGBA(255,192,0,255));
 	nvgFill(vg);
+}
+
+void loadShape() {
+	// good ideas here: https://github.com/memononen/nanosvg/issues/58
+	// just load some mono color glyphs for use in ui
+}
+
+void loadAssets(NVGcontext* vg) {
+	// load font
+	nvgCreateFont(vg, "sans", "../example/Roboto-Regular.ttf");
 }
 
 int main() {
@@ -96,9 +121,7 @@ int main() {
 	glfwSetTime(0);
 	prevt = glfwGetTime();
 
-	// load font
-	nvgCreateFont(vg, "sans", "../example/Roboto-Regular.ttf");
-	int frameNo = 0;
+	loadAssets(vg);
 
 	while (!glfwWindowShouldClose(window)) {
 		double mx, my, t, dt;
@@ -115,7 +138,7 @@ int main() {
 		glfwGetWindowSize(window, &winWidth, &winHeight);
 		glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
 
-		// Calculate pixel ration for hi-dpi devices.
+		// Calculate pixel ratio for hi-dpi devices.
 		pxRatio = (float)fbWidth / (float)winWidth;
 
 		// Update and render
@@ -130,10 +153,7 @@ int main() {
 
 		// render some things here
 		render(vg);
-
-			renderNumber(vg,20,20,frameNo);
-			frameNo++;
-		//
+		// finish rendering
 
 		nvgEndFrame(vg);
 
