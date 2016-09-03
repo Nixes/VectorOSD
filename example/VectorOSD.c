@@ -1,4 +1,13 @@
 #include <stdio.h>
+
+// start svg dependencies 
+#include <string.h>
+#include <math.h>
+#define NANOSVG_IMPLEMENTATION  // Expands implementation
+#include "nanosvg.h"
+// end svg dependencies
+
+// start nanovg dependencies
 #ifdef NANOVG_GLEW
 	#include <GL/glew.h>
 #endif
@@ -7,7 +16,7 @@
 #define NANOVG_GL2_IMPLEMENTATION
 #include "nanovg_gl.h"
 #include "perf.h"
-
+// end nanovg dependencies
 
 void errorcb(int error, const char* desc) {
 	printf("GLFW error %d: %s\n", error, desc);
