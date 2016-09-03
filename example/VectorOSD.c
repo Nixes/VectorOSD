@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-// start svg dependencies 
+// start svg dependencies
 #include <string.h>
 #include <math.h>
 #define NANOSVG_IMPLEMENTATION  // Expands implementation
@@ -17,6 +17,11 @@
 #include "nanovg_gl.h"
 #include "perf.h"
 // end nanovg dependencies
+
+// glyphs used in ui
+NSVGimage* glyph_power = NULL;
+NSVGimage* glyph_gps = NULL;
+NSVGimage* glyph_armed = NULL;
 
 void errorcb(int error, const char* desc) {
 	printf("GLFW error %d: %s\n", error, desc);
@@ -69,16 +74,58 @@ void render(NVGcontext* vg) {
 	nvgRect(vg, 100,100, 120,30);
 	nvgFillColor(vg, nvgRGBA(255,192,0,255));
 	nvgFill(vg);
+
+	drawGlyph(vg,glyph_power);
 }
 
-void loadShape() {
+
+void drawGlyph(NVGcontext* vg,NSVGimage* image) {
+	NSVGshape* shape;
+	NSVGpath* path;
+
+	for (shape = image->shapes; shape != NULL; shape = shape->next) {
+			nvgFillColor(vg, nvgRGBA(255,255,255,255));
+			nvgStrokeColor(vg, nvgRGBA(255,255,255,255));
+			nvgStrokeWidth(vg, shape->strokeWidth);
+	    for (path = shape->paths; path != NULL; path = path->next) {
+	        for (int i = 0; i < path->npts-1; i += 3) {
+							nvgBeginPath(vg);
+			        nvgMoveTo(vg, path->pts[0], path->pts[1]);
+			        for (i = 0; i < path->npts-1; i += 3) {
+			            float* p = &path->pts[i*2];
+			            nvgBeginPath(vg);
+			            nvgBezierTo(vg, p[2], p[3], p[4], p[5], p[6], p[7]);
+			        }
+			        if (path->closed)
+			        	nvgLineTo(vg, path->pts[0], path->pts[1]);
+			        nvgStroke(vg);
+	        }
+	    }
+	}
+}
+
+NSVGimage* loadGlyph(const char* location) {
 	// good ideas here: https://github.com/memononen/nanosvg/issues/58
 	// just load some mono color glyphs for use in ui
+	NSVGimage* g_image = nsvgParseFromFile(location, "px", 96.0f);
+	if (g_image == NULL) {
+		printf("Could not open glyph: "); printf(location); printf("\n");
+	}
+	return g_image;
 }
 
 void loadAssets(NVGcontext* vg) {
+	printf("Loading Assets...\n");
+
 	// load font
 	nvgCreateFont(vg, "sans", "../example/Roboto-Regular.ttf");
+	// load glyphs
+	glyph_power = loadGlyph("../glyphs/battery-with-bolt.svg");
+}
+
+void unloadAssets() {
+	// unload glyphs
+	nsvgDelete(glyph_power);
 }
 
 int main() {
@@ -169,6 +216,8 @@ int main() {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	unloadAssets();
 
 	nvgDeleteGL2(vg);
 
