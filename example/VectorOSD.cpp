@@ -28,6 +28,9 @@ struct NSVGimage* glyph_power = NULL;
 struct NSVGimage* glyph_gps = NULL;
 struct NSVGimage* glyph_armed = NULL;
 
+
+logBox log_box(300,0);
+
 void errorcb(int error, const char* desc) {
 	printf("GLFW error %d: %s\n", error, desc);
 }
@@ -69,22 +72,8 @@ void renderText(NVGcontext* vg, float x, float y,const char* text) {
 	nvgText(vg, x, y, text, NULL);
 }
 
-// actually render the objects
-void render(NVGcontext* vg) {
-	renderText(vg,500,550,"Some text here to test the quality of font rendering using this set of libraries.\n Test Newline");
 
-	nvgBeginPath(vg);
-	nvgRect(vg, 100,100, 120,30);
-	nvgFillColor(vg, nvgRGBA(255,192,0,255));
-	nvgFill(vg);
-
-	//renderBootLogBox(vg, 500,300);
-
-	drawGlyph(vg,glyph_power);
-}
-
-
-void drawGlyph(NVGcontext* vg,NSVGimage* image) {
+void drawGlyph(NVGcontext* vg, NSVGimage* image) {
 	NSVGshape* shape;
 	NSVGpath* path;
 
@@ -177,6 +166,26 @@ void unloadAssets() {
 	nsvgDelete(glyph_power);
 }
 
+// actually render the objects
+void render(NVGcontext* vg) {
+	renderText(vg,500,550,"Some text here to test the quality of font rendering using this set of libraries.\n Test Newline");
+
+	nvgBeginPath(vg);
+	nvgRect(vg, 100,100, 120,30);
+	nvgFillColor(vg, nvgRGBA(255,192,0,255));
+	nvgFill(vg);
+
+	log_box.render(vg);
+
+
+	drawGlyph(vg,glyph_power);
+}
+
+void init() {
+	log_box.log("Initialising");
+	log_box.log("Adding Assets");
+}
+
 int main() {
 	GLFWwindow* window;
 	NVGcontext* vg = NULL;
@@ -227,6 +236,7 @@ int main() {
 	prevt = glfwGetTime();
 
 	loadAssets(vg);
+	init();
 
 	while (!glfwWindowShouldClose(window)) {
 		double mx, my, t, dt;
