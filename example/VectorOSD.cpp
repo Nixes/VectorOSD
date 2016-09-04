@@ -39,19 +39,9 @@ int blowup = 0;
 int premult = 0;
 
 
-
-void runBootCheck() {
-
-}
-
 void renderBatteryBar(NVGcontext* vg) {
 
 }
-
-void renderAttitudeIndicator(NVGcontext* vg) {
-
-}
-
 
 void renderNumber(NVGcontext* vg, float x, float y,int number) {
 	char number_string[15];
@@ -168,15 +158,12 @@ void unloadAssets() {
 
 // actually render the objects
 void render(NVGcontext* vg) {
-	renderText(vg,500,550,"Some text here to test the quality of font rendering using this set of libraries.\n Test Newline");
-
 	nvgBeginPath(vg);
 	nvgRect(vg, 100,100, 120,30);
 	nvgFillColor(vg, nvgRGBA(255,192,0,255));
 	nvgFill(vg);
 
 	log_box.render(vg);
-
 
 	drawGlyph(vg,glyph_power);
 }
