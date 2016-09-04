@@ -4,7 +4,6 @@
 using std::string;
 
 class logBox {
-
 private:
   const unsigned int padding = 10;
   const unsigned int height = 400;
@@ -67,15 +66,51 @@ public:
   }
 };
 
+class powerStats {
+private:
 
+public:
+};
+
+// shows attitude
+class attitudeIndicator {
+private:
+  const unsigned int height = 400;
+  const unsigned int width = 600;
+
+  float roll,pitch,yaw;
+
+  renderAngleLine() {
+
+  }
+  renderBorder() {
+
+  }
+
+public:
+  attitudeIndicator() {
+
+  }
+  ~attitudeIndicator() {
+
+  }
+
+  void render() {
+
+  }
+
+  void update() {
+
+  }
+};
 
 class systemStatus {
 private:
-
   enum system_status { ok, warning, error };
   struct system {
     string name;
     system_status status;
+
   };
   std::vector<system> systems;
 
@@ -89,6 +124,10 @@ public:
   }
 
   void render() {
+
+  }
+  
+  void update() {
 
   }
 };
