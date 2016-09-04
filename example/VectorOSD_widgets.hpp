@@ -3,6 +3,26 @@
 
 using std::string;
 
+float animationAmount(double tmp_current_time,double tmp_total_time) {
+  double animation_amount = tmp_total_time /  tmp_current_time;
+  if (animation_amount > 1.0) {
+    animation_amount = 1.0;
+  } else if (animation_amount < 0) {
+    animation_amount = 0.0;
+  }
+  return animation_amount;
+};
+
+char animateTransparency(float animation_amount) {
+  const char start_transparency = 0;
+  const char end_transparency = 255;
+
+  char range = end_transparency - start_transparency;
+  char final_transparency = range * animation_amount;
+
+  return final_transparency;
+};
+
 class logBox {
 private:
   const unsigned int padding = 10;
@@ -126,7 +146,7 @@ public:
   void render() {
 
   }
-  
+
   void update() {
 
   }
