@@ -18,10 +18,15 @@
 #include "perf.h"
 // end nanovg dependencies
 
+// start VectorOSD specific dependencies
+#include "VectorOSD_widgets.hpp"
+// end VectorOSD specific dependencies
+
+
 // glyphs used in ui
-NSVGimage* glyph_power = NULL;
-NSVGimage* glyph_gps = NULL;
-NSVGimage* glyph_armed = NULL;
+struct NSVGimage* glyph_power = NULL;
+struct NSVGimage* glyph_gps = NULL;
+struct NSVGimage* glyph_armed = NULL;
 
 void errorcb(int error, const char* desc) {
 	printf("GLFW error %d: %s\n", error, desc);
@@ -30,9 +35,7 @@ void errorcb(int error, const char* desc) {
 int blowup = 0;
 int premult = 0;
 
-void renderBootLogBox() {
 
-}
 
 void runBootCheck() {
 
@@ -45,6 +48,7 @@ void renderBatteryBar(NVGcontext* vg) {
 void renderAttitudeIndicator(NVGcontext* vg) {
 
 }
+
 
 void renderNumber(NVGcontext* vg, float x, float y,int number) {
 	char number_string[15];
@@ -67,13 +71,14 @@ void renderText(NVGcontext* vg, float x, float y,const char* text) {
 
 // actually render the objects
 void render(NVGcontext* vg) {
-	renderText(vg,0,10,"Fuck yeah we have text!");
-	renderText(vg,500,550,"More Text");
+	renderText(vg,500,550,"Some text here to test the quality of font rendering using this set of libraries.\n Test Newline");
 
 	nvgBeginPath(vg);
 	nvgRect(vg, 100,100, 120,30);
 	nvgFillColor(vg, nvgRGBA(255,192,0,255));
 	nvgFill(vg);
+
+	//renderBootLogBox(vg, 500,300);
 
 	drawGlyph(vg,glyph_power);
 }
@@ -83,11 +88,55 @@ void drawGlyph(NVGcontext* vg,NSVGimage* image) {
 	NSVGshape* shape;
 	NSVGpath* path;
 
+	// <<<< start experimental stuff
+	int width = 200, height = 200; // the desired width and height for the final image
+
+	//glViewport(0, 0, width, height);
+
+	float view[4], cx, cy, hw, hh, aspect, px;
+	cx = image->width*0.5f;
+	cy = image->height*0.5f;
+	hw = image->width*0.5f;
+	hh = image->height*0.5f;
+
+
+	if (width/hw < height/hh) {
+		aspect = (float)height / (float)width;
+		view[0] = cx - hw * 1.2f;
+		view[2] = cx + hw * 1.2f;
+		view[1] = cy - hw * 1.2f * aspect;
+		view[3] = cy + hw * 1.2f * aspect;
+	} else {
+		aspect = (float)width / (float)height;
+		view[0] = cx - hh * 1.2f * aspect;
+		view[2] = cx + hh * 1.2f * aspect;
+		view[1] = cy - hh * 1.2f;
+		view[3] = cy + hh * 1.2f;
+	}
+	// Size of one pixel.
+	px = (view[2] - view[1]) / (float)width;
+
+	glOrtho(view[0], view[2], view[3], view[1], -1, 1);
+
+	// draw bounding box
+	glColor4ub(0,0,0,64);
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(0, 0);
+	glVertex2f(image->width, 0);
+	glVertex2f(image->width, image->height);
+	glVertex2f(0, image->height);
+	glEnd();
+
+	// <<<< end experimental stuff
+
+	printf("Rendering glyph\n");
 	for (shape = image->shapes; shape != NULL; shape = shape->next) {
 			nvgFillColor(vg, nvgRGBA(255,255,255,255));
 			nvgStrokeColor(vg, nvgRGBA(255,255,255,255));
 			nvgStrokeWidth(vg, shape->strokeWidth);
+			printf("  Rendering shape\n");
 	    for (path = shape->paths; path != NULL; path = path->next) {
+					printf("   Rendering path\n");
 	        for (int i = 0; i < path->npts-1; i += 3) {
 							nvgBeginPath(vg);
 			        nvgMoveTo(vg, path->pts[0], path->pts[1]);
@@ -120,7 +169,7 @@ void loadAssets(NVGcontext* vg) {
 	// load font
 	nvgCreateFont(vg, "sans", "../example/Roboto-Regular.ttf");
 	// load glyphs
-	glyph_power = loadGlyph("../glyphs/battery-with-bolt.svg");
+	glyph_power = loadGlyph("../glyphs/nano.svg");
 }
 
 void unloadAssets() {
