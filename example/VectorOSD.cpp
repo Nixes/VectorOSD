@@ -28,8 +28,9 @@ struct NSVGimage* glyph_power = NULL;
 struct NSVGimage* glyph_gps = NULL;
 struct NSVGimage* glyph_armed = NULL;
 
-
+// initialise widgets
 logBox log_box(300,0);
+
 
 void errorcb(int error, const char* desc) {
 	printf("GLFW error %d: %s\n", error, desc);
@@ -38,10 +39,6 @@ void errorcb(int error, const char* desc) {
 int blowup = 0;
 int premult = 0;
 
-
-void renderBatteryBar(NVGcontext* vg) {
-
-}
 
 void renderNumber(NVGcontext* vg, float x, float y,int number) {
 	char number_string[15];
@@ -177,7 +174,7 @@ int main() {
 	GLFWwindow* window;
 	NVGcontext* vg = NULL;
 	PerfGraph fps;
-	double prevt = 0;
+	double previous_time = 0;
 
 	if (!glfwInit()) {
 		printf("Failed to init GLFW.");
@@ -220,21 +217,21 @@ int main() {
 	glfwSwapInterval(0);
 
 	glfwSetTime(0);
-	prevt = glfwGetTime();
+	previous_time = glfwGetTime();
 
 	loadAssets(vg);
 	init();
 
 	while (!glfwWindowShouldClose(window)) {
-		double mx, my, t, dt;
+		double mx, my, current_time, delta_time;
 		int winWidth, winHeight;
 		int fbWidth, fbHeight;
 		float pxRatio;
 
-		t = glfwGetTime();
-		dt = t - prevt;
-		prevt = t;
-		updateGraph(&fps, dt);
+		current_time = glfwGetTime();
+		delta_time = current_time - previous_time;
+		previous_time = current_time;
+		updateGraph(&fps, delta_time);
 
 		glfwGetCursorPos(window, &mx, &my);
 		glfwGetWindowSize(window, &winWidth, &winHeight);
@@ -252,11 +249,10 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
 
 		nvgBeginFrame(vg, winWidth, winHeight, pxRatio);
-
-		// render some things here
-		render(vg);
-		// finish rendering
-
+			// render some things here
+			render(vg);
+			renderGraph(vg, 5,5, &fps);
+			// finish rendering
 		nvgEndFrame(vg);
 
 		glfwSwapBuffers(window);
@@ -264,7 +260,6 @@ int main() {
 	}
 
 	unloadAssets();
-
 	nvgDeleteGL2(vg);
 
 	glfwTerminate();
