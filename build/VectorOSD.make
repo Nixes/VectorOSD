@@ -32,7 +32,7 @@ ifeq ($(config),debug)
   ALL_LDFLAGS   += $(LDFLAGS) -L.
   LDDEPS    += libnanovg.a
   LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
-  LINKCMD    = $(CC) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
+  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -54,7 +54,7 @@ ifeq ($(config),release)
   ALL_LDFLAGS   += $(LDFLAGS) -L. -s
   LDDEPS    += libnanovg.a
   LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
-  LINKCMD    = $(CC) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
+  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -76,7 +76,7 @@ ifeq ($(config),debug64)
   ALL_LDFLAGS   += $(LDFLAGS) -L. -m64 -L/usr/lib64
   LDDEPS    += libnanovg.a
   LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
-  LINKCMD    = $(CC) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
+  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -98,7 +98,7 @@ ifeq ($(config),release64)
   ALL_LDFLAGS   += $(LDFLAGS) -L. -s -m64 -L/usr/lib64
   LDDEPS    += libnanovg.a
   LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
-  LINKCMD    = $(CC) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
+  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -120,7 +120,7 @@ ifeq ($(config),debug32)
   ALL_LDFLAGS   += $(LDFLAGS) -L. -m32 -L/usr/lib32
   LDDEPS    += libnanovg.a
   LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
-  LINKCMD    = $(CC) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
+  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -142,7 +142,7 @@ ifeq ($(config),release32)
   ALL_LDFLAGS   += $(LDFLAGS) -L. -s -m32 -L/usr/lib32
   LDDEPS    += libnanovg.a
   LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
-  LINKCMD    = $(CC) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
+  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -211,12 +211,12 @@ prelink:
 ifneq (,$(PCH))
 $(GCH): $(PCH)
 	@echo $(notdir $<)
-	$(SILENT) $(CC) -x c-header $(ALL_CFLAGS) -MMD -MP $(DEFINES) $(INCLUDES) -o "$@" -MF "$(@:%.gch=%.d)" -c "$<"
+	$(SILENT) $(CXX) -x c++-header $(ALL_CXXFLAGS) -MMD -MP $(DEFINES) $(INCLUDES) -o "$@" -MF "$(@:%.gch=%.d)" -c "$<"
 endif
 
-$(OBJDIR)/VectorOSD.o: ../example/VectorOSD.c
+$(OBJDIR)/VectorOSD.o: ../example/VectorOSD.cpp
 	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 
 $(OBJDIR)/demo.o: ../example/demo.c
 	@echo $(notdir $<)
