@@ -66,3 +66,29 @@ public:
     renderLogEvents(vg);
   }
 };
+
+
+
+class systemStatus {
+private:
+
+  enum system_status { ok, warning, error };
+  struct system {
+    string name;
+    system_status status;
+  };
+  std::vector<system> systems;
+
+public:
+  systemStatus() {
+
+  }
+
+  ~systemStatus() {
+
+  }
+
+  void render() {
+
+  }
+};
