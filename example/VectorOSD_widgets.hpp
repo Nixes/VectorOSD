@@ -3,22 +3,23 @@
 
 using std::string;
 
-float animationAmount(double tmp_current_time,double tmp_total_time) {
+// TODO OPTIMISATION: streamline branching
+double animationAmount(double tmp_current_time,double tmp_total_time) {
   double animation_amount = tmp_total_time /  tmp_current_time;
-  if (animation_amount > 1.0) {
+  if (tmp_current_time > tmp_total_time) {
     animation_amount = 1.0;
-  } else if (animation_amount < 0) {
+  } else if (animation_amount < 0.0) {
     animation_amount = 0.0;
   }
   return animation_amount;
 };
 
-char animateTransparency(float animation_amount) {
-  const char start_transparency = 0;
-  const char end_transparency = 255;
+unsigned char animateTransparency(double animation_amount) {
+  const unsigned char start_transparency = 0;
+  const unsigned char end_transparency = 255;
 
-  char range = end_transparency - start_transparency;
-  char final_transparency = range * animation_amount;
+  unsigned char range = end_transparency - start_transparency;
+  unsigned char final_transparency = range * animation_amount;
 
   return final_transparency;
 };
@@ -32,12 +33,15 @@ private:
   unsigned int x;
   unsigned int y;
 
+  const double anim_line_time = 1.00000; // how long the animation should take in seconds
+  double anim_line_current_time; // how long it has been animating for
+
   std::vector<string> events;
 
-  void renderLogText(NVGcontext* vg,unsigned int tmp_x,unsigned int tmp_y,const char* text) {
+  void renderLogText(NVGcontext* vg,unsigned int tmp_x,unsigned int tmp_y,const char* text,char fade) {
     nvgFontSize(vg, 20.0f);
     nvgFontFace(vg, "sans");
-    nvgFillColor(vg, nvgRGBA(255,255,255,255));
+    nvgFillColor(vg, nvgRGBA(255,255,255,fade));
     nvgTextAlign(vg,NVG_ALIGN_LEFT|NVG_ALIGN_MIDDLE);
     nvgText(vg, tmp_x, tmp_y, text, NULL);
   }
@@ -45,8 +49,17 @@ private:
   void renderLogEvents(NVGcontext* vg) {
     int events_size = events.size();
     for(int i = 0 ; i < events_size; i++) {
-      unsigned int new_y = i * line_height;
-      renderLogText(vg,x + padding, new_y, events[i].c_str() );
+      unsigned char fade = 255;
+      if (i == events_size - 1) {
+        fade = animateTransparency(animationAmount(anim_line_current_time,anim_line_time));
+        printf("Anim current time: %f\n",anim_line_current_time);
+        printf("Anim amount: %f\n",animationAmount(anim_line_current_time,anim_line_time));
+        printf("Fade was: %u\n",fade);
+      }
+      unsigned int real_line_no = events_size - i;
+      unsigned int new_y = real_line_no * line_height;
+      renderLogText(vg,x + padding, new_y, events[i].c_str(), fade);
+      // animate last event
     }
   }
 
@@ -68,6 +81,7 @@ public:
   logBox(unsigned int temp_x,unsigned int temp_y) {
     x = temp_x;
     y = temp_y;
+    anim_line_current_time = 0;
   };
 
   // destructor
@@ -78,9 +92,13 @@ public:
   void log(const char* text) {
     string tmp_string = text;
     events.push_back(tmp_string);
+    anim_line_current_time = 0; // reset line animation
   }
 
-  void render(NVGcontext* vg) {
+  void render(NVGcontext* vg, double delta_time) {
+    if (anim_line_current_time < anim_line_time) {
+      anim_line_current_time += delta_time;
+    }
     renderLogBox(vg);
     renderLogEvents(vg);
   }

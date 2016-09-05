@@ -153,14 +153,30 @@ void unloadAssets() {
 	nsvgDelete(glyph_power);
 }
 
+static void debugKeys(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	NVG_NOTUSED(scancode);
+	NVG_NOTUSED(mods);
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GL_TRUE);
+
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {}
+	if (key == GLFW_KEY_S && action == GLFW_PRESS) {}
+	if (key == GLFW_KEY_P && action == GLFW_PRESS) {}
+	if (key == GLFW_KEY_L && action == GLFW_PRESS) {
+		log_box.log("A new log element");
+	}
+}
+
 // actually render the objects
-void render(NVGcontext* vg) {
+void render(NVGcontext* vg, double delta_time) {
 	nvgBeginPath(vg);
 	nvgRect(vg, 100,100, 120,30);
 	nvgFillColor(vg, nvgRGBA(255,192,0,255));
 	nvgFill(vg);
 
-	log_box.render(vg);
+	log_box.render(vg,delta_time);
+	printf("Delta_time: %f\n",delta_time );
 
 	drawGlyph(vg,glyph_power);
 }
@@ -196,7 +212,9 @@ int main() {
 		return -1;
 	}
 
+	glfwSetKeyCallback(window, debugKeys);
 	glfwMakeContextCurrent(window);
+
 	#ifdef NANOVG_GLEW
 	  if(glewInit() != GLEW_OK) {
 			printf("Could not init glew.\n");
@@ -250,7 +268,7 @@ int main() {
 
 		nvgBeginFrame(vg, winWidth, winHeight, pxRatio);
 			// render some things here
-			render(vg);
+			render(vg,delta_time);
 			renderGraph(vg, 5,5, &fps);
 			// finish rendering
 		nvgEndFrame(vg);
