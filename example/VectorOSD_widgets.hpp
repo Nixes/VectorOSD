@@ -5,7 +5,8 @@ using std::string;
 
 // TODO OPTIMISATION: streamline branching
 double animationAmount(double tmp_current_time,double tmp_total_time) {
-  double animation_amount = tmp_total_time /  tmp_current_time;
+  double animation_amount =  tmp_current_time / tmp_total_time ;
+  //printf("Anim amount: %f from: tmp_total_time %f / tmp_current_time %f \n",animation_amount,,tmp_current_time);
   if (tmp_current_time > tmp_total_time) {
     animation_amount = 1.0;
   } else if (animation_amount < 0.0) {
@@ -52,7 +53,6 @@ private:
       unsigned char fade = 255;
       if (i == events_size - 1) {
         fade = animateTransparency(animationAmount(anim_line_current_time,anim_line_time));
-        printf("Anim current time: %f\n",anim_line_current_time);
         printf("Anim amount: %f\n",animationAmount(anim_line_current_time,anim_line_time));
         printf("Fade was: %u\n",fade);
       }
