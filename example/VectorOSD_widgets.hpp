@@ -104,45 +104,81 @@ public:
 
 class powerStats {
 private:
+  // battery states
+  enum battery_states {normal, warning, severe};
+  battery_states battery_state;
+
+  // battery state colours
+  const NVGcolor normal_colour = nvgRGBA(255,255,255,255);
   const NVGcolor warning_colour = nvgRGBA(255,255,150,255);
   const NVGcolor severe_colour = nvgRGBA(255,150,150,255);
 
+  // battery voltages
   const float max_voltage = 12.6;
   const float min_voltage = 11.1;
+  const float warning_voltage = 11.4;
 
-  const float warning_voltage = 11.3;
+  float battery_amount = 0.5;
 
-  float battery_voltage;
-
-  const unsigned int height = 200;
-  const unsigned int width = 400;
+  // position
   unsigned int x;
   unsigned int y;
 
-  // battery value returned between 0.0 and 1.0
-  float getBatteryAmount() {
-     float range = max_voltage - min_voltage;
-     float compensated_value =  battery_voltage - min_voltage;
-     float battery_amount = compensated_value / range;
+  // size
+  const unsigned int width = 800;
+  const unsigned int height = 10;
 
-    return battery_amount;
+  // battery value returned between 0.0 and 1.0
+  void updateBatteryAmount(float battery_voltage) {
+    float range = max_voltage - min_voltage;
+    float compensated_value =  battery_voltage - min_voltage;
+    battery_amount = compensated_value / range;
+
+    // update battery state
+    if (battery_voltage < min_voltage) {
+      battery_state = severe;
+    } else if (battery_voltage < warning_voltage) {
+      battery_state = warning;
+    } else {
+      battery_state = normal;
+    }
   }
 
   void renderBatteryBar(NVGcontext* vg) {
-
+    unsigned int calculated_width = battery_amount * width;
+    nvgBeginPath(vg);
+    nvgRect(vg, x,y, calculated_width, height);
+    if (battery_state == normal) {
+      nvgFillColor(vg, normal_colour);
+    } else if (battery_state == warning) {
+      nvgFillColor(vg, warning_colour);
+    }
+    nvgFill(vg);
   }
 
   void renderBatteryBox(NVGcontext* vg) {
-
+    nvgBeginPath(vg);
+    nvgRect(vg, x,y, width, height);
+    nvgStrokeColor(vg, nvgRGBA(255,255,255,255));
+    nvgStrokeWidth(vg, 1);
+    nvgStroke(vg);
   }
 public:
+  powerStats(unsigned int temp_x,unsigned int temp_y) {
+    x = temp_x;
+    y = temp_y;
+    battery_amount = 0.5;
+  }
+  ~powerStats() {
+
+  }
   void render(NVGcontext* vg, double delta_time) {
     renderBatteryBox(vg);
     renderBatteryBar(vg);
   }
 
   void update(float tmp_battery_voltage) {
-    battery_voltage= tmp_battery_voltage;
+    updateBatteryAmount(tmp_battery_voltage);
   }
 };
 
