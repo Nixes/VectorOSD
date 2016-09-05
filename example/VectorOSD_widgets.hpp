@@ -3,10 +3,10 @@
 
 using std::string;
 
+
 // TODO OPTIMISATION: streamline branching
 double animationAmount(double tmp_current_time,double tmp_total_time) {
   double animation_amount =  tmp_current_time / tmp_total_time ;
-  //printf("Anim amount: %f from: tmp_total_time %f / tmp_current_time %f \n",animation_amount,,tmp_current_time);
   if (tmp_current_time > tmp_total_time) {
     animation_amount = 1.0;
   } else if (animation_amount < 0.0) {
@@ -28,13 +28,13 @@ unsigned char animateTransparency(double animation_amount) {
 class logBox {
 private:
   const unsigned int padding = 10;
-  const unsigned int height = 400;
+  const unsigned int height = 200;
   const unsigned int width = 400;
   const unsigned int line_height = 20;
   unsigned int x;
   unsigned int y;
 
-  const double anim_line_time = 1.00000; // how long the animation should take in seconds
+  const double anim_line_time = 0.50000; // how long the animation should take in seconds
   double anim_line_current_time; // how long it has been animating for
 
   std::vector<string> events;
@@ -53,8 +53,6 @@ private:
       unsigned char fade = 255;
       if (i == events_size - 1) {
         fade = animateTransparency(animationAmount(anim_line_current_time,anim_line_time));
-        printf("Anim amount: %f\n",animationAmount(anim_line_current_time,anim_line_time));
-        printf("Fade was: %u\n",fade);
       }
       unsigned int real_line_no = events_size - i;
       unsigned int new_y = real_line_no * line_height;
@@ -106,11 +104,49 @@ public:
 
 class powerStats {
 private:
+  const NVGcolor warning_colour = nvgRGBA(255,255,150,255);
+  const NVGcolor severe_colour = nvgRGBA(255,150,150,255);
 
+  const float max_voltage = 12.6;
+  const float min_voltage = 11.1;
+
+  const float warning_voltage = 11.3;
+
+  float battery_voltage;
+
+  const unsigned int height = 200;
+  const unsigned int width = 400;
+  unsigned int x;
+  unsigned int y;
+
+  // battery value returned between 0.0 and 1.0
+  float getBatteryAmount() {
+     float range = max_voltage - min_voltage;
+     float compensated_value =  battery_voltage - min_voltage;
+     float battery_amount = compensated_value / range;
+
+    return battery_amount;
+  }
+
+  void renderBatteryBar(NVGcontext* vg) {
+
+  }
+
+  void renderBatteryBox(NVGcontext* vg) {
+
+  }
 public:
+  void render(NVGcontext* vg, double delta_time) {
+    renderBatteryBox(vg);
+    renderBatteryBar(vg);
+  }
+
+  void update(float tmp_battery_voltage) {
+    battery_voltage= tmp_battery_voltage;
+  }
 };
 
-// shows attitude
+// shows attitude AND COMPASS if available
 class attitudeIndicator {
 private:
   const unsigned int height = 400;
