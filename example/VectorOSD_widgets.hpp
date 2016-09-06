@@ -113,11 +113,16 @@ private:
   const NVGcolor warning_colour = nvgRGBA(255,255,150,255);
   const NVGcolor severe_colour = nvgRGBA(255,150,150,255);
 
+  // animation variables
+  const double anim_time = 0.5; // 500ms
+  double current_anim_time;
+
   // battery voltages
   const float max_voltage = 12.6;
   const float min_voltage = 11.1;
   const float warning_voltage = 11.4;
 
+  float previous_battery_amount = 0;
   float battery_amount = 0.5;
 
   // position
@@ -128,10 +133,14 @@ private:
   const unsigned int width = 800;
   const unsigned int height = 10;
 
+
   // battery value returned between 0.0 and 1.0
   void updateBatteryAmount(float battery_voltage) {
     float range = max_voltage - min_voltage;
     float compensated_value =  battery_voltage - min_voltage;
+    // save the previous battery value
+    previous_battery_amount = battery_amount;
+    // update the current battery amount
     battery_amount = compensated_value / range;
 
     // update battery state
@@ -145,9 +154,14 @@ private:
   }
 
   void renderBatteryBar(NVGcontext* vg) {
-    unsigned int calculated_width = battery_amount * width;
+    double difference_battery_amount = battery_amount - previous_battery_amount ;
+
+    double animated_battery_amount = battery_amount + (difference_battery_amount * animationAmount(current_anim_time,anim_time) );
+    unsigned int calculated_width = animated_battery_amount * width;
     nvgBeginPath(vg);
+
     nvgRect(vg, x,y, calculated_width, height);
+
     if (battery_state == normal) {
       nvgFillColor(vg, normal_colour);
     } else if (battery_state == warning) {
@@ -173,6 +187,9 @@ public:
 
   }
   void render(NVGcontext* vg, double delta_time) {
+    if (current_anim_time < anim_time) {
+      current_anim_time += delta_time;
+    }
     renderBatteryBox(vg);
     renderBatteryBar(vg);
   }
@@ -182,7 +199,7 @@ public:
   }
 };
 
-// shows attitude AND COMPASS if available
+// shows attitude
 class attitudeIndicator {
 private:
   const unsigned int height = 400;
@@ -214,6 +231,15 @@ public:
   }
 };
 
+// includes mini map and waypoints
+class locationSystem {
+private:
+
+public:
+};
+
+
+// shows overall system icons and manages boot process (including animations)
 class systemStatus {
 private:
   enum system_status { ok, warning, error };
