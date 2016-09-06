@@ -4,6 +4,11 @@ A fast and smooth opengl(es) OSD for fpv.
 
 Makes use of NanoVG for drawing.
 
+Requires a c++11 compatible compiler for now, you can set this in gcc by adding the argument
+```
+-std=c++11
+```
+
 
 #Windows MSYS Instructions (x86-64)
 
