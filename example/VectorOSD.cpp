@@ -184,7 +184,7 @@ static void debugKeys(GLFWwindow* window, int key, int scancode, int action, int
 		power_stats.update(11.2);
 	}
 	if (key == GLFW_KEY_M && action == GLFW_PRESS) {
-		power_stats.update(12.2);
+		power_stats.update(12.1);
 	}
 }
 
@@ -299,7 +299,12 @@ int main() {
 	}
 
 	unloadAssets();
-	nvgDeleteGL2(vg);
+	
+	#ifdef USING_GLES
+		nvgDeleteGLES2(vg);
+	#else
+		nvgDeleteGL2(vg);
+	#endif
 
 	glfwTerminate();
 	return 0;
