@@ -12,7 +12,7 @@ Requires a c++11 compatible compiler for now, you can set this in gcc by adding 
 
 Install dependencies
 ```
-sudo apt-get install premake4 build-essential libglew-dev libglfw3-dev
+sudo apt-get install premake4 make build-essential libglew-dev libglfw3-dev
 ```
 
 Generate makefiles
