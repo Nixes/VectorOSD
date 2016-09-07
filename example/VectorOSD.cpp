@@ -213,8 +213,10 @@ int main() {
 	PerfGraph fps;
 	double previous_time = 0;
 
-	if (!glfwInit()) {
+	int glfw_init_error = glfwInit();
+	if (!glfw_init_error) {
 		printf("Failed to init GLFW.");
+		printf(" Init returned: %i.\n", glfw_init_error);
 		return -1;
 	}
 
@@ -230,6 +232,7 @@ int main() {
 	//	window = glfwCreateWindow(1000, 600, "NanoVG", glfwGetPrimaryMonitor(), NULL);
 	if (!window) {
 		glfwTerminate();
+		printf("Failed to create window.\n");
 		return -1;
 	}
 
@@ -299,7 +302,7 @@ int main() {
 	}
 
 	unloadAssets();
-	
+
 	#ifdef USING_GLES
 		nvgDeleteGLES2(vg);
 	#else
