@@ -8,7 +8,23 @@ Requires a c++11 compatible compiler for now, you can set this in gcc by adding 
 ```
 -std=c++11
 ```
+#Ubuntu / Debian Instructions
 
+Install dependencies
+```
+sudo apt-get install premake4 build-essential libglew-dev libglfw3-dev
+```
+
+Generate makefiles
+```
+premake4 gmake
+```
+
+Build
+```
+cd build
+make
+```
 
 #Windows MSYS Instructions (x86-64)
 
