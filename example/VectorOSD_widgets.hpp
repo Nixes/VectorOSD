@@ -210,10 +210,10 @@ private:
 
   float roll,pitch,yaw;
 
-  renderAngleLine() {
+  void renderAngleLine() {
 
   }
-  renderBorder() {
+  void renderBorder() {
 
   }
 
