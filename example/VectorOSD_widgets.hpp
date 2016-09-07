@@ -142,7 +142,7 @@ private:
     previous_battery_amount = battery_amount;
     // update the current battery amount
     battery_amount = compensated_value / range;
-    printf("DEBUG: Battery_amount %f previous_battery_amount %f", battery_amount, previous_battery_amount);
+    printf("DEBUG: Battery_amount %f previous_battery_amount %f\n", battery_amount, previous_battery_amount);
 
     // update battery state
     if (battery_voltage < min_voltage) {
@@ -188,7 +188,7 @@ public:
 
   }
   void render(NVGcontext* vg, double delta_time) {
-    printf("DEBUG: current_anim_time %f anim_time %f", current_anim_time, anim_time);
+    printf("DEBUG: current_anim_time %f anim_time %f\n", current_anim_time, anim_time);
     if (current_anim_time < anim_time) {
       current_anim_time += delta_time;
     }
