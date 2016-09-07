@@ -1,3 +1,5 @@
+//#define USING_GLES
+
 #include <stdio.h>
 
 // start svg dependencies
@@ -11,9 +13,16 @@
 #ifdef NANOVG_GLEW
 	#include <GL/glew.h>
 #endif
+// some building conditionals based on if we are using opengles of opengl
+#ifdef USING_GLES
+	#define NANOVG_GLES2_IMPLEMENTATION
+	#define GLFW_INCLUDE_ES2
+#else
+	#define NANOVG_GL2_IMPLEMENTATION
+#endif
+
 #include <GLFW/glfw3.h>
 #include "nanovg.h"
-#define NANOVG_GL2_IMPLEMENTATION
 #include "nanovg_gl.h"
 #include "perf.h"
 // end nanovg dependencies
@@ -181,7 +190,7 @@ static void debugKeys(GLFWwindow* window, int key, int scancode, int action, int
 
 // actually render the objects
 void render(NVGcontext* vg, double delta_time) {
-	printf("Delta_time: %f\n",delta_time );
+	//printf("Delta_time: %f\n",delta_time );
 	nvgBeginPath(vg);
 	nvgRect(vg, 100,100, 120,30);
 	nvgFillColor(vg, nvgRGBA(255,192,0,255));
@@ -190,7 +199,7 @@ void render(NVGcontext* vg, double delta_time) {
 	log_box.render(vg,delta_time);
 	power_stats.render(vg,delta_time);
 
-	drawGlyph(vg,glyph_power);
+	//drawGlyph(vg,glyph_power);
 }
 
 void init() {
@@ -234,17 +243,17 @@ int main() {
 		}
 	#endif
 
-	#ifdef DEMO_MSAA
-		vg = nvgCreateGL2(NVG_STENCIL_STROKES | NVG_DEBUG);
+	#ifdef USING_GLES
+		vg = nvgCreateGLES2(NVG_ANTIALIAS | NVG_STENCIL_STROKES | NVG_DEBUG);
 	#else
 		vg = nvgCreateGL2(NVG_ANTIALIAS | NVG_STENCIL_STROKES | NVG_DEBUG);
 	#endif
-		if (vg == NULL) {
-			printf("Could not init nanovg.\n");
-			return -1;
-		}
+	if (vg == NULL) {
+		printf("Could not init nanovg.\n");
+		return -1;
+	}
 
-	glfwSwapInterval(0);
+	glfwSwapInterval(0); // this changes vsync settings, to turn vsync off set to 0
 
 	glfwSetTime(0);
 	previous_time = glfwGetTime();
