@@ -188,10 +188,10 @@ static void debugKeys(GLFWwindow* window, int key, int scancode, int action, int
 	}
 
 	// attitude debug keys
-	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
+	if (key == GLFW_KEY_LEFT && action != GLFW_RELEASE) {
 		attitude_indicator.update(-0.1);
 	}
-	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
+	if (key == GLFW_KEY_RIGHT && action != GLFW_RELEASE) {
 		attitude_indicator.update(0.1);
 	}
 
