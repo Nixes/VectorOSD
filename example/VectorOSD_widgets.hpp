@@ -3,7 +3,7 @@
 #include <math.h>
 
 using std::string;
-
+const long double PI = 3.141592653589793238L;
 
 // TODO OPTIMISATION: streamline branching
 double animationAmount(double tmp_current_time,double tmp_total_time) {
@@ -238,8 +238,8 @@ private:
     unsigned int line_start_x = 0;
     unsigned int line_start_y = 0;
 
-    int line_end_x = line_start_x + line_length * sin(roll);
-    int line_end_y = line_start_y + line_length * cos(roll);
+    int line_end_x = line_start_x + line_length * sin(roll + PI/2);
+    int line_end_y = line_start_y + line_length * cos(roll + PI/2 );
 
     int middle_x = line_end_x / 2;
     int middle_y = line_end_y / 2;
