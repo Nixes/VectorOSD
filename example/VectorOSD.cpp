@@ -229,7 +229,7 @@ int main() {
 
 
 	window = glfwCreateWindow(1000, 600, "VectorOSD", NULL, NULL);
-	//	window = glfwCreateWindow(1000, 600, "NanoVG", glfwGetPrimaryMonitor(), NULL);
+	//	window = glfwCreateWindow(1000, 600, "NanoVG", glfwGetPrimaryMonitor(), NULL); // this creates a full screen window
 	if (!window) {
 		glfwTerminate();
 		printf("Failed to create window.\n");
@@ -256,7 +256,7 @@ int main() {
 		return -1;
 	}
 
-	glfwSwapInterval(0); // this changes vsync settings, to turn vsync off set to 0
+	glfwSwapInterval(1); // this changes vsync settings, to turn vsync off set to 0
 
 	glfwSetTime(0);
 	previous_time = glfwGetTime();
