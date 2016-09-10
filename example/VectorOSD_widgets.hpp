@@ -134,15 +134,26 @@ private:
   const unsigned int height = 10;
 
 
-  // battery value returned between 0.0 and 1.0
-  void updateBatteryAmount(float battery_voltage) {
-    float range = max_voltage - min_voltage;
-    float compensated_value =  battery_voltage - min_voltage;
+  void updateBatteryAmount(float new_battery_value) {
     // save the previous battery value
     previous_battery_amount = battery_amount;
     // update the current battery amount
-    battery_amount = compensated_value / range;
-    printf("DEBUG: Battery_amount %f previous_battery_amount %f\n", battery_amount, previous_battery_amount);
+    battery_amount = new_battery_value;
+  }
+
+  // battery value returned between 0.0 and 1.0
+  void calculateBatteryAmount(float battery_voltage) {
+    float range = max_voltage - min_voltage;
+    float compensated_value =  battery_voltage - min_voltage;
+
+    float new_battery_value = compensated_value / range;
+    if (new_battery_value > 0) {
+      updateBatteryAmount(new_battery_value);
+    } else {
+      updateBatteryAmount(0);
+    }
+
+    printf("\nDEBUG: Battery_amount %f previous_battery_amount %f\n", battery_amount, previous_battery_amount);
 
     // update battery state
     if (battery_voltage < min_voltage) {
@@ -156,9 +167,11 @@ private:
 
   void renderBatteryBar(NVGcontext* vg) {
     double difference_battery_amount = battery_amount - previous_battery_amount ;
-
-    double animated_battery_amount = battery_amount + (difference_battery_amount * animationAmount(current_anim_time,anim_time) );
+    double animated_battery_amount = previous_battery_amount + (difference_battery_amount * animationAmount(current_anim_time,anim_time) );
     unsigned int calculated_width = animated_battery_amount * width;
+
+    //printf("DEBUG: difference_battery_amount %f animated_difference %f animated_battery_amount %f calculated_width %i\n", difference_battery_amount,animated_difference, animated_battery_amount,calculated_width);
+
     nvgBeginPath(vg);
 
     nvgRect(vg, x,y, calculated_width, height);
@@ -188,16 +201,16 @@ public:
 
   }
   void render(NVGcontext* vg, double delta_time) {
-    printf("DEBUG: current_anim_time %f anim_time %f\n", current_anim_time, anim_time);
     if (current_anim_time < anim_time) {
       current_anim_time += delta_time;
     }
+    printf("DEBUG: current_anim_time %f anim_time %f\n", current_anim_time, anim_time);
     renderBatteryBox(vg);
     renderBatteryBar(vg);
   }
 
   void update(float tmp_battery_voltage) {
-    updateBatteryAmount(tmp_battery_voltage);
+    calculateBatteryAmount(tmp_battery_voltage);
     current_anim_time = 0; // reset animation on update
   }
 };
