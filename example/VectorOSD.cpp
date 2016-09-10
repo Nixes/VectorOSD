@@ -40,6 +40,7 @@ struct NSVGimage* glyph_armed = NULL;
 // initialise widgets
 logBox log_box(300,0);
 powerStats power_stats(50,550);
+attitudeIndicator attitude_indicator(300,200);
 
 
 void errorcb(int error, const char* desc) {
@@ -175,7 +176,6 @@ static void debugKeys(GLFWwindow* window, int key, int scancode, int action, int
 	if (key == GLFW_KEY_L && action == GLFW_PRESS) {
 		log_box.log("A new log element");
 	}
-
 	// battery bar debug keys
 	if (key == GLFW_KEY_B && action == GLFW_PRESS) {
 		power_stats.update(10.9);
@@ -186,19 +186,23 @@ static void debugKeys(GLFWwindow* window, int key, int scancode, int action, int
 	if (key == GLFW_KEY_M && action == GLFW_PRESS) {
 		power_stats.update(12.1);
 	}
+
+	// attitude debug keys
+	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
+		attitude_indicator.update(-0.1);
+	}
+	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
+		attitude_indicator.update(0.1);
+	}
+
 }
 
 // actually render the objects
 void render(NVGcontext* vg, double delta_time) {
 	//printf("Delta_time: %f\n",delta_time );
-	nvgBeginPath(vg);
-	nvgRect(vg, 100,100, 120,30);
-	nvgFillColor(vg, nvgRGBA(255,192,0,255));
-	nvgFill(vg);
-
 	log_box.render(vg,delta_time);
 	power_stats.render(vg,delta_time);
-
+	attitude_indicator.render(vg);
 	//drawGlyph(vg,glyph_power);
 }
 

@@ -1,5 +1,6 @@
 #include <vector>
 #include <string>
+#include <math.h>
 
 using std::string;
 
@@ -218,32 +219,58 @@ public:
 // shows attitude
 class attitudeIndicator {
 private:
-  const unsigned int height = 400;
-  const unsigned int width = 600;
+  // position
+  unsigned int x;
+  unsigned int y;
+
+  // size
+  const unsigned int height = 300;
+  const unsigned int width = 400;
 
   float roll,pitch,yaw;
 
-  void renderAngleLine() {
+  void renderAngleLine(NVGcontext* vg) {
+    unsigned int start_x = x + x / 2;
+    unsigned int start_y = y + y / 2;
 
+    unsigned int line_length = 100;
+
+    unsigned int end_x = start_x + line_length * sin(roll);
+    unsigned int end_y = start_y + line_length * sin(roll);
+
+    printf("end_x %d end_y %d\n",end_x,end_y );
+
+    nvgBeginPath(vg);
+    nvgMoveTo(vg,start_x,start_y);
+    nvgLineTo(vg,end_x,end_y);
+    nvgFillColor(vg, nvgRGBA(255,255,255,100));
+    nvgFill(vg);
   }
-  void renderBorder() {
-
+  void renderBorder(NVGcontext* vg) {
+    nvgBeginPath(vg);
+    nvgRect(vg, x,y, width, height);
+    nvgStrokeColor(vg, nvgRGBA(255,255,255,255));
+    nvgStrokeWidth(vg, 1);
+    nvgStroke(vg);
   }
 
 public:
-  attitudeIndicator() {
-
+  attitudeIndicator(unsigned int temp_x,unsigned int temp_y) {
+    x = temp_x;
+    y = temp_y;
+    roll = 1;
   }
   ~attitudeIndicator() {
 
   }
 
-  void render() {
-
+  void render(NVGcontext* vg) {
+    renderBorder(vg);
+    renderAngleLine(vg);
   }
 
-  void update() {
-
+  void update(float delta_roll) {
+    roll+= delta_roll;
   }
 };
 
