@@ -230,25 +230,30 @@ private:
   float roll,pitch,yaw;
 
   void renderAngleLine(NVGcontext* vg) {
-    unsigned int start_x = x + x / 2;
-    unsigned int start_y = y + y / 2;
+    const unsigned int center_x = width / 2 + x;
+    const unsigned int center_y = height / 2 + y;
 
-    unsigned int line_length = 100;
 
-    unsigned int end_x = start_x + line_length * sin(roll);
-    unsigned int end_y = start_y + line_length * sin(roll);
+    unsigned int line_length = width;
+    unsigned int line_start_x = 0;
+    unsigned int line_start_y = 0;
 
-    printf("end_x %d end_y %d\n",end_x,end_y );
+    int line_end_x = line_start_x + line_length * sin(roll);
+    int line_end_y = line_start_y + line_length * cos(roll);
+
+    int middle_x = line_end_x / 2;
+    int middle_y = line_end_y / 2;
+
 
     nvgBeginPath(vg);
-    nvgMoveTo(vg,start_x,start_y);
-    nvgLineTo(vg,end_x,end_y);
+    nvgMoveTo(vg,center_x - middle_x,center_y - middle_y);
+    nvgLineTo(vg,center_x + line_end_x - middle_x, center_y + line_end_y - middle_y);
     nvgFillColor(vg, nvgRGBA(255,255,255,100));
     nvgFill(vg);
   }
   void renderBorder(NVGcontext* vg) {
     nvgBeginPath(vg);
-    nvgRect(vg, x,y, width, height);
+    nvgRect(vg, x, y, width, height);
     nvgStrokeColor(vg, nvgRGBA(255,255,255,255));
     nvgStrokeWidth(vg, 1);
     nvgStroke(vg);
@@ -258,7 +263,7 @@ public:
   attitudeIndicator(unsigned int temp_x,unsigned int temp_y) {
     x = temp_x;
     y = temp_y;
-    roll = 1;
+    roll = 0;
   }
   ~attitudeIndicator() {
 
