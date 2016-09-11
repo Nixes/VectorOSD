@@ -54,6 +54,9 @@ private:
   const double anim_line_time = 0.50000; // how long the animation should take in seconds
   double anim_line_current_time; // how long it has been animating for
 
+  const double anim_hide_time = 2.0; // time to wait between entrys before hiding the log box
+  double anim_current_hide_time; // how long till last update
+
   std::vector<string> events;
 
   void renderLogText(NVGcontext* vg,unsigned int tmp_x,unsigned int tmp_y,const char* text,char fade) {
@@ -108,14 +111,18 @@ public:
     string tmp_string = text;
     events.push_back(tmp_string);
     anim_line_current_time = 0; // reset line animation
+    anim_current_hide_time = 0;
   }
 
   void render(NVGcontext* vg, double delta_time) {
     if (anim_line_current_time < anim_line_time) {
       anim_line_current_time += delta_time;
     }
-    renderLogBox(vg);
-    renderLogEvents(vg);
+    if (anim_current_hide_time < anim_hide_time) {
+      anim_current_hide_time += delta_time;
+      renderLogBox(vg);
+      renderLogEvents(vg);
+    }
   }
 };
 
@@ -280,7 +287,7 @@ private:
   void renderBorder(NVGcontext* vg) {
     nvgBeginPath(vg);
     nvgRect(vg, pre_trans_x, pre_trans_y, width, height);
-    nvgStrokeColor(vg, nvgRGBA(255,255,255,255));
+    nvgStrokeColor(vg, nvgRGBA(255,255,255,100));
     nvgStrokeWidth(vg, 1);
     nvgStroke(vg);
   }
