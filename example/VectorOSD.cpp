@@ -51,26 +51,6 @@ int blowup = 0;
 int premult = 0;
 
 
-void renderNumber(NVGcontext* vg, float x, float y,int number) {
-	char number_string[15];
-	sprintf(number_string, "%d", number);
-
-	nvgFontSize(vg, 20.0f);
-	nvgFontFace(vg, "sans");
-	nvgFillColor(vg, nvgRGBA(255,255,255,255));
-	nvgTextAlign(vg,NVG_ALIGN_LEFT|NVG_ALIGN_MIDDLE);
-	nvgText(vg, x, y, number_string, NULL);
-}
-
-void renderText(NVGcontext* vg, float x, float y,const char* text) {
-	nvgFontSize(vg, 20.0f);
-	nvgFontFace(vg, "sans");
-	nvgFillColor(vg, nvgRGBA(255,255,255,255));
-	nvgTextAlign(vg,NVG_ALIGN_LEFT|NVG_ALIGN_MIDDLE);
-	nvgText(vg, x, y, text, NULL);
-}
-
-
 void drawGlyph(NVGcontext* vg, NSVGimage* image) {
 	NSVGshape* shape;
 	NSVGpath* path;

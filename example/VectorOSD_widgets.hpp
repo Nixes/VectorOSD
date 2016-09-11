@@ -26,6 +26,22 @@ unsigned char animateTransparency(double animation_amount) {
   return final_transparency;
 };
 
+void renderText(NVGcontext* vg, float x, float y,const char* text) {
+  float font_size = 20.0;
+	nvgFontSize(vg, font_size);
+	nvgFontFace(vg, "sans");
+	nvgFillColor(vg, nvgRGBA(255,255,255,255));
+	nvgTextAlign(vg,NVG_ALIGN_LEFT|NVG_ALIGN_MIDDLE);
+	nvgText(vg, x + font_size / 6, y + font_size /2, text, NULL);
+};
+
+void renderNumber(NVGcontext* vg, float x, float y,int number) {
+	char number_string[15];
+	sprintf(number_string, "%d", number);
+
+	renderText(vg, x, y, number_string);
+};
+
 class logBox {
 private:
   const unsigned int padding = 10;
@@ -110,9 +126,9 @@ private:
   battery_states battery_state;
 
   // battery state colours
-  const NVGcolor normal_colour = nvgRGBA(255,255,255,255);
-  const NVGcolor warning_colour = nvgRGBA(255,255,150,255);
-  const NVGcolor severe_colour = nvgRGBA(255,150,150,255);
+  const NVGcolor normal_colour = nvgRGBA(255,255,255,100);
+  const NVGcolor warning_colour = nvgRGBA(255,255,150,100);
+  const NVGcolor severe_colour = nvgRGBA(255,150,150,100);
 
   // animation variables
   const double anim_time = 0.5; // 500ms
@@ -188,7 +204,7 @@ private:
   void renderBatteryBox(NVGcontext* vg) {
     nvgBeginPath(vg);
     nvgRect(vg, x,y, width, height);
-    nvgStrokeColor(vg, nvgRGBA(255,255,255,255));
+    nvgStrokeColor(vg, nvgRGBA(255,255,255,100));
     nvgStrokeWidth(vg, 1);
     nvgStroke(vg);
   }
@@ -205,7 +221,6 @@ public:
     if (current_anim_time < anim_time) {
       current_anim_time += delta_time;
     }
-    printf("DEBUG: current_anim_time %f anim_time %f\n", current_anim_time, anim_time);
     renderBatteryBox(vg);
     renderBatteryBar(vg);
   }
@@ -227,6 +242,7 @@ private:
   const unsigned int height = 300;
   const unsigned int width = 400;
 
+  // angles are all in radians
   float roll,pitch,yaw;
 
   void renderAngleLine(NVGcontext* vg) {
@@ -239,7 +255,7 @@ private:
     unsigned int line_start_y = 0;
 
     int line_end_x = line_start_x + line_length * sin(roll + PI/2);
-    int line_end_y = line_start_y + line_length * cos(roll + PI/2 );
+    int line_end_y = line_start_y + line_length * cos(roll + PI/2);
 
     int middle_x = line_end_x / 2;
     int middle_y = line_end_y / 2;
@@ -251,6 +267,25 @@ private:
     nvgFillColor(vg, nvgRGBA(255,255,255,100));
     nvgFill(vg);
   }
+
+  float convertRadToDeg(float radians) {
+    return radians * 180.0 / PI;
+  };
+
+  void renderAngleText(NVGcontext* vg) {
+    const int angle_text_x = x - 50;
+    const int angle_text_y = y + 150;
+
+    const float deg_roll = convertRadToDeg(roll);
+    nvgBeginPath(vg);
+    nvgRect(vg, angle_text_x, angle_text_y, 33, 20);
+    nvgStrokeColor(vg, nvgRGBA(255,255,255,255));
+    nvgStrokeWidth(vg, 1);
+    nvgStroke(vg);
+
+    renderNumber(vg, angle_text_x, angle_text_y, (int)deg_roll );
+  }
+
   void renderBorder(NVGcontext* vg) {
     nvgBeginPath(vg);
     nvgRect(vg, x, y, width, height);
@@ -271,6 +306,7 @@ public:
 
   void render(NVGcontext* vg) {
     renderBorder(vg);
+    renderAngleText(vg);
     renderAngleLine(vg);
   }
 
@@ -278,6 +314,7 @@ public:
     roll+= delta_roll;
   }
 };
+
 
 // includes mini map and waypoints
 class locationSystem {
