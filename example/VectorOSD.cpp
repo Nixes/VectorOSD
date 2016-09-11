@@ -182,8 +182,8 @@ void render(NVGcontext* vg, double delta_time) {
 	//printf("Delta_time: %f\n",delta_time );
 	log_box.render(vg,delta_time);
 	power_stats.render(vg,delta_time);
-	attitude_indicator.render(vg);
 	//drawGlyph(vg,glyph_power);
+	attitude_indicator.render(vg); // attitude indicator must be the last thing to render as it does some complex transformations
 }
 
 void init() {
@@ -276,8 +276,8 @@ int main() {
 
 		nvgBeginFrame(vg, winWidth, winHeight, pxRatio);
 			// render some things here
-			render(vg,delta_time);
 			renderGraph(vg, 5,5, &fps);
+			render(vg,delta_time);
 			// finish rendering
 		nvgEndFrame(vg);
 
