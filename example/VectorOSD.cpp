@@ -40,7 +40,7 @@ struct NSVGimage* glyph_armed = NULL;
 // initialise widgets
 logBox log_box(300,0);
 powerStats power_stats(50,550);
-attitudeIndicator attitude_indicator(300,200);
+attitudeIndicator attitude_indicator(300,50);
 
 
 void errorcb(int error, const char* desc) {
@@ -169,10 +169,16 @@ static void debugKeys(GLFWwindow* window, int key, int scancode, int action, int
 
 	// attitude debug keys
 	if (key == GLFW_KEY_LEFT && action != GLFW_RELEASE) {
-		attitude_indicator.update(-0.1);
+		attitude_indicator.update(-0.1,0);
 	}
 	if (key == GLFW_KEY_RIGHT && action != GLFW_RELEASE) {
-		attitude_indicator.update(0.1);
+		attitude_indicator.update(0.1,0);
+	}
+	if (key == GLFW_KEY_UP && action != GLFW_RELEASE) {
+		attitude_indicator.update(0,-0.1);
+	}
+	if (key == GLFW_KEY_DOWN && action != GLFW_RELEASE) {
+		attitude_indicator.update(0,0.1);
 	}
 
 }
