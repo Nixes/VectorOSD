@@ -264,6 +264,7 @@ private:
     return radians * 180.0 / PI;
   };
 
+  // render current roll tag
   void renderAngleText(NVGcontext* vg) {
     const int box_width = 33;
     const int angle_text_x = (pre_trans_x + width/2) - box_width;
@@ -279,6 +280,7 @@ private:
     renderNumber(vg, angle_text_x, angle_text_y, (int)deg_roll );
   }
 
+  // render a marker line
   void renderAngleLine(NVGcontext* vg, int angle) {
     const int line_length = 50; // in pixels
     const int marker_spacing = 10; // in pixels
@@ -305,6 +307,7 @@ private:
     renderNumber(vg, pre_trans_x + width, calculated_y, angle);
   }
 
+  // render center line
   void renderMiddleLine(NVGcontext* vg) {
     unsigned int line_length = width;
 
@@ -315,9 +318,9 @@ private:
     nvgFill(vg);
   }
 
+  // renders the marker lines for pitch
   void renderAngleLines(NVGcontext* vg) {
     renderMiddleLine(vg);
-
 
     for (int i =0; i < pitch_markers_num; i++) {
       int tmp_deg = ( ((pitch_markers_num/2) - i ) * pitch_markers_interval) + convertRadToDeg(pitch);
