@@ -175,10 +175,10 @@ static void debugKeys(GLFWwindow* window, int key, int scancode, int action, int
 		attitude_indicator.update(0.1,0);
 	}
 	if (key == GLFW_KEY_UP && action != GLFW_RELEASE) {
-		attitude_indicator.update(0,-0.01);
+		attitude_indicator.update(0,0.01);
 	}
 	if (key == GLFW_KEY_DOWN && action != GLFW_RELEASE) {
-		attitude_indicator.update(0,0.01);
+		attitude_indicator.update(0,-0.01);
 	}
 
 }
