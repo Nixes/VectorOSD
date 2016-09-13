@@ -318,12 +318,18 @@ private:
     nvgFill(vg);
   }
 
+  // round pitch based on pitch marker interval
+  int roundedPitch() {
+    int pitch_deg = convertRadToDeg(pitch);
+    return pitch_deg - pitch_deg % pitch_markers_interval;
+  }
+
   // renders the marker lines for pitch
   void renderAngleLines(NVGcontext* vg) {
     renderMiddleLine(vg);
 
     for (int i =0; i < pitch_markers_num; i++) {
-      int tmp_deg = ( ((pitch_markers_num/2) - i ) * pitch_markers_interval) + convertRadToDeg(pitch);
+      int tmp_deg = ( ((pitch_markers_num/2) - i ) * pitch_markers_interval) + roundedPitch();
       renderAngleLine(vg,tmp_deg);
     }
     // should get 25 to -25
