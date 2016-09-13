@@ -287,7 +287,7 @@ private:
 
 
     const int middle_y = pre_trans_y + (height/2);
-    const int calculated_y = middle_y + ( (angle-convertRadToDeg(pitch) ) * marker_spacing);
+    const int calculated_y = middle_y + ( -(angle-convertRadToDeg(pitch) ) * marker_spacing);
 
 
     // first line
