@@ -133,7 +133,7 @@ private:
   battery_states battery_state;
 
   // battery state colours
-  const NVGcolor normal_colour = nvgRGBA(255,255,255,100);
+  const NVGcolor normal_colour = nvgRGBA(150,255,150,100);
   const NVGcolor warning_colour = nvgRGBA(255,255,150,100);
   const NVGcolor severe_colour = nvgRGBA(255,150,150,100);
 
@@ -180,7 +180,7 @@ private:
     printf("\nDEBUG: Battery_amount %f previous_battery_amount %f\n", battery_amount, previous_battery_amount);
 
     // update battery state
-    if (battery_voltage < min_voltage) {
+    if (battery_voltage <= min_voltage) {
       battery_state = severe;
     } else if (battery_voltage < warning_voltage) {
       battery_state = warning;
@@ -204,6 +204,8 @@ private:
       nvgFillColor(vg, normal_colour);
     } else if (battery_state == warning) {
       nvgFillColor(vg, warning_colour);
+    } else if (battery_state == severe) {
+      nvgFillColor(vg, severe_colour);
     }
     nvgFill(vg);
   }
