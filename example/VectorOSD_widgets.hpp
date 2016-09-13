@@ -304,7 +304,7 @@ private:
     nvgFillColor(vg, nvgRGBA(255,255,255,100));
     nvgFill(vg);
 
-    renderNumber(vg, pre_trans_x + width, calculated_y, angle);
+    renderNumber(vg, pre_trans_x + width, calculated_y - 10, angle);
   }
 
   // render center line
