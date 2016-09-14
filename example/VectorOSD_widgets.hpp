@@ -52,7 +52,7 @@ private:
   unsigned int y;
 
   const double anim_line_time = 0.50000; // how long the animation should take in seconds
-  double anim_line_current_time; // how long it has been animating for
+  double anim_current_line_time; // how long it has been animating for
 
   const double anim_hide_time = 2.0; // time to wait between entrys before hiding the log box
   double anim_current_hide_time; // how long till last update
@@ -72,7 +72,7 @@ private:
     for(int i = 0 ; i < events_size; i++) {
       unsigned char fade = 255;
       if (i == events_size - 1) {
-        fade = animateTransparency(animationAmount(anim_line_current_time,anim_line_time));
+        fade = animateTransparency(animationAmount(anim_current_line_time,anim_line_time));
       }
       unsigned int real_line_no = events_size - i;
       unsigned int new_y = real_line_no * line_height;
@@ -99,7 +99,7 @@ public:
   logBox(unsigned int temp_x,unsigned int temp_y) {
     x = temp_x;
     y = temp_y;
-    anim_line_current_time = 0;
+    anim_current_line_time = 0;
   };
 
   // destructor
@@ -110,13 +110,13 @@ public:
   void log(const char* text) {
     string tmp_string = text;
     events.push_back(tmp_string);
-    anim_line_current_time = 0; // reset line animation
+    anim_current_line_time = 0; // reset line animation
     anim_current_hide_time = 0;
   }
 
   void render(NVGcontext* vg, double delta_time) {
-    if (anim_line_current_time < anim_line_time) {
-      anim_line_current_time += delta_time;
+    if (anim_current_line_time < anim_line_time) {
+      anim_current_line_time += delta_time;
     }
     if (anim_current_hide_time < anim_hide_time) {
       anim_current_hide_time += delta_time;
