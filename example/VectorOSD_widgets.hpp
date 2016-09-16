@@ -42,6 +42,10 @@ void renderNumber(NVGcontext* vg, float x, float y,int number) {
 	renderText(vg, x, y, number_string);
 };
 
+float convertRadToDeg(float radians) {
+  return radians * 180.0 / PI;
+};
+
 class logBox {
 private:
   const unsigned int padding = 10;
@@ -262,10 +266,6 @@ private:
   const int pitch_markers_num = 10; // how many pitch marker lines to show
   const int pitch_markers_interval = 5; // draw every 5 degrees
 
-  float convertRadToDeg(float radians) {
-    return radians * 180.0 / PI;
-  };
-
   // render current roll tag
   void renderAngleText(NVGcontext* vg) {
     const int box_width = 33;
@@ -376,6 +376,45 @@ public:
   }
 };
 
+
+class bearingIndicator {
+private:
+  // position
+  unsigned int x;
+  unsigned int y;
+
+  // size
+  const unsigned int height = 20;
+  const unsigned int width = 400;
+
+  // bearing
+  float bearing;
+
+  void renderBearingNum(NVGcontext* vg) {
+    renderNumber(vg,x,y, (int)convertRadToDeg(bearing) );
+  }
+
+  void renderBorder(NVGcontext* vg) {
+    nvgBeginPath(vg);
+    nvgRect(vg, x, y, width, height);
+    nvgStrokeColor(vg, nvgRGBA(255,255,255,100));
+    nvgStrokeWidth(vg, 1);
+    nvgStroke(vg);
+  }
+public:
+  bearingIndicator(unsigned int temp_x,unsigned int temp_y) {
+      x = temp_x;
+      y = temp_y;
+      bearing = 0;
+  }
+  void render(NVGcontext* vg) {
+    renderBorder(vg);
+    renderBearingNum(vg);
+  }
+  void update(float tmp_bearing) {
+    bearing += tmp_bearing;
+  }
+};
 
 // includes mini map and waypoints
 class locationSystem {
