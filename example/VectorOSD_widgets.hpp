@@ -388,7 +388,13 @@ private:
   const unsigned int width = 400;
 
   // bearing
-  float bearing;
+  float bearing; // in radians
+
+  void renderBearingMarkers() {
+      // render N, S, E ,W
+
+      // render NW, NE , SW, SE
+  }
 
   void renderBearingNum(NVGcontext* vg) {
     renderNumber(vg,x,y, (int)convertRadToDeg(bearing) );
