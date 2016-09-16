@@ -58,3 +58,4 @@ $RECYCLE.BIN/
 *.d
 *.o
 *.exe
+*.a
