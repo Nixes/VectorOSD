@@ -41,6 +41,7 @@ struct NSVGimage* glyph_armed = NULL;
 logBox log_box(300,0);
 powerStats power_stats(50,550);
 attitudeIndicator attitude_indicator(300,50);
+bearingIndicator bearing_indicator(300,10);
 
 
 void errorcb(int error, const char* desc) {
@@ -55,66 +56,27 @@ void drawGlyph(NVGcontext* vg, NSVGimage* image) {
 	NSVGshape* shape;
 	NSVGpath* path;
 
-	// <<<< start experimental stuff
-	int width = 200, height = 200; // the desired width and height for the final image
-
-	//glViewport(0, 0, width, height);
-
-	float view[4], cx, cy, hw, hh, aspect, px;
-	cx = image->width*0.5f;
-	cy = image->height*0.5f;
-	hw = image->width*0.5f;
-	hh = image->height*0.5f;
-
-
-	if (width/hw < height/hh) {
-		aspect = (float)height / (float)width;
-		view[0] = cx - hw * 1.2f;
-		view[2] = cx + hw * 1.2f;
-		view[1] = cy - hw * 1.2f * aspect;
-		view[3] = cy + hw * 1.2f * aspect;
-	} else {
-		aspect = (float)width / (float)height;
-		view[0] = cx - hh * 1.2f * aspect;
-		view[2] = cx + hh * 1.2f * aspect;
-		view[1] = cy - hh * 1.2f;
-		view[3] = cy + hh * 1.2f;
-	}
-	// Size of one pixel.
-	px = (view[2] - view[1]) / (float)width;
-
-	glOrtho(view[0], view[2], view[3], view[1], -1, 1);
-
-	// draw bounding box
-	glColor4ub(0,0,0,64);
-	glBegin(GL_LINE_LOOP);
-	glVertex2f(0, 0);
-	glVertex2f(image->width, 0);
-	glVertex2f(image->width, image->height);
-	glVertex2f(0, image->height);
-	glEnd();
-
-	// <<<< end experimental stuff
-
 	printf("Rendering glyph\n");
 	for (shape = image->shapes; shape != NULL; shape = shape->next) {
-			nvgFillColor(vg, nvgRGBA(255,255,255,255));
-			nvgStrokeColor(vg, nvgRGBA(255,255,255,255));
-			nvgStrokeWidth(vg, shape->strokeWidth);
+			//nvgStrokeWidth(vg, shape->strokeWidth);
 			printf("  Rendering shape\n");
 	    for (path = shape->paths; path != NULL; path = path->next) {
 					printf("   Rendering path\n");
 	        for (int i = 0; i < path->npts-1; i += 3) {
-							nvgBeginPath(vg);
-			        nvgMoveTo(vg, path->pts[0], path->pts[1]);
-			        for (i = 0; i < path->npts-1; i += 3) {
+							//nvgBeginPath(vg);
+			        //nvgMoveTo(vg, path->pts[0], path->pts[1]);
+			        //for (i = 0; i < path->npts-1; i += 3) {
+									printf("   	Rendering point\n");
 			            float* p = &path->pts[i*2];
 			            nvgBeginPath(vg);
 			            nvgBezierTo(vg, p[2], p[3], p[4], p[5], p[6], p[7]);
-			        }
-			        if (path->closed)
-			        	nvgLineTo(vg, path->pts[0], path->pts[1]);
-			        nvgStroke(vg);
+			        //}
+			        /*if (path->closed)
+			        	nvgLineTo(vg, path->pts[0], path->pts[1]);*/
+			        //nvgStroke(vg);
+							nvgStrokeColor(vg, nvgRGBA(255,255,0,32));
+							nvgStrokeWidth(vg, 3.0f);
+							nvgStroke(vg);
 	        }
 	    }
 	}
@@ -169,10 +131,10 @@ static void debugKeys(GLFWwindow* window, int key, int scancode, int action, int
 
 	// attitude debug keys
 	if (key == GLFW_KEY_LEFT && action != GLFW_RELEASE) {
-		attitude_indicator.update(-0.1,0);
+		attitude_indicator.update(-0.01,0);
 	}
 	if (key == GLFW_KEY_RIGHT && action != GLFW_RELEASE) {
-		attitude_indicator.update(0.1,0);
+		attitude_indicator.update(0.01,0);
 	}
 	if (key == GLFW_KEY_UP && action != GLFW_RELEASE) {
 		attitude_indicator.update(0,0.01);
@@ -181,6 +143,13 @@ static void debugKeys(GLFWwindow* window, int key, int scancode, int action, int
 		attitude_indicator.update(0,-0.01);
 	}
 
+	// compass debug keys
+	if (key == GLFW_KEY_Q && action != GLFW_RELEASE) {
+		bearing_indicator.update(0.01);
+	}
+	if (key == GLFW_KEY_E && action != GLFW_RELEASE) {
+		bearing_indicator.update(-0.01);
+	}
 }
 
 // actually render the objects
@@ -188,7 +157,9 @@ void render(NVGcontext* vg, double delta_time) {
 	//printf("Delta_time: %f\n",delta_time );
 	log_box.render(vg,delta_time);
 	power_stats.render(vg,delta_time);
-	//drawGlyph(vg,glyph_power);
+	bearing_indicator.render(vg);
+	drawGlyph(vg,glyph_power);
+
 	attitude_indicator.render(vg); // attitude indicator must be the last thing to render as it does some complex transformations
 }
 
