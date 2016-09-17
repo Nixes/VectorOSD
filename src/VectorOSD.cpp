@@ -96,7 +96,7 @@ void loadAssets(NVGcontext* vg) {
 	printf("Loading Assets...\n");
 
 	// load font
-	nvgCreateFont(vg, "sans", "../example/Roboto-Regular.ttf");
+	nvgCreateFont(vg, "sans", "../src/Roboto-Regular.ttf");
 	// load glyphs
 	glyph_power = loadGlyph("../glyphs/nano.svg");
 }
