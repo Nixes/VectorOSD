@@ -26,7 +26,7 @@ solution "nanovg"
     project "VectorOSD"
 		kind "ConsoleApp"
 			language "C++"
-			files { "src/VectorOSD.cpp", "src/demo.c", "src/perf.c" }
+			files { "src/VectorOSD.cpp", "src/perf.c" }
 			includedirs { "nanovg", "src" }
 			targetdir("build")
 			links { "nanovg" }
