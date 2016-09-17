@@ -153,7 +153,6 @@ endif
 
 OBJECTS := \
 	$(OBJDIR)/VectorOSD.o \
-	$(OBJDIR)/demo.o \
 	$(OBJDIR)/perf.o \
 
 RESOURCES := \
@@ -217,10 +216,6 @@ endif
 $(OBJDIR)/VectorOSD.o: ../src/VectorOSD.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/demo.o: ../src/demo.c
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 
 $(OBJDIR)/perf.o: ../src/perf.c
 	@echo $(notdir $<)
