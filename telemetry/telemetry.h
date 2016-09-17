@@ -19,8 +19,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include "../lib/pgmspace.h"
-#include "../config.h"
+//#include "../config.h"
 
 #define INPUT_CHANNELS 10
 
@@ -218,7 +217,7 @@ namespace modules
 	};
 
 	// telemetry modules collection
-	extern const module_t modules [] PROGMEM;
+	extern const module_t modules [];
 	extern const uint8_t count;
 
 	inline const char *name_p (uint8_t module)
