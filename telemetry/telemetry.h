@@ -222,27 +222,27 @@ namespace modules
 
 	inline const char *name_p (uint8_t module)
 	{
-		return (const char *) pgm_read_ptr (&modules [module].name_p);
+		return (const char *) &modules [module].name_p;
 	}
 
 	inline void init_settings (uint8_t module)
 	{
-		((module_t::proc_t) pgm_read_ptr (&modules [module].init_settings)) ();
+		((module_t::proc_t) &modules [module].init_settings) ();
 	}
 
 	inline void reset_settings (uint8_t module)
 	{
-		((module_t::proc_t) pgm_read_ptr (&modules [module].reset_settings)) ();
+		((module_t::proc_t) &modules [module].reset_settings) ();
 	}
 
 	inline void init (uint8_t module)
 	{
-		((module_t::proc_t) pgm_read_ptr (&modules [module].init)) ();
+		((module_t::proc_t) &modules [module].init) ();
 	}
 
 	inline bool update (uint8_t module)
 	{
-		return ((module_t::update_t) pgm_read_ptr (&modules [module].update)) ();
+		return ((module_t::update_t) &modules [module].update) ();
 	}
 
 }
