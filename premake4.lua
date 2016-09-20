@@ -54,7 +54,7 @@ solution "nanovg"
 
 				project "telemetry_debug"
 				language "C"
-				kind "StaticLib"
+				kind "ConsoleApp"
 				includedirs { "nanovg" , "telemetry"}
 				files { "src/telemetry_debug.cpp" }
 				targetdir("build")

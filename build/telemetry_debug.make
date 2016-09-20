@@ -22,7 +22,7 @@ endif
 ifeq ($(config),debug)
   OBJDIR     = obj/Debug/telemetry_debug
   TARGETDIR  = .
-  TARGET     = $(TARGETDIR)/libtelemetry_debug.a
+  TARGET     = $(TARGETDIR)/telemetry_debug.exe
   DEFINES   += -DDEBUG
   INCLUDES  += -I../nanovg -I../telemetry
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
@@ -32,7 +32,7 @@ ifeq ($(config),debug)
   ALL_LDFLAGS   += $(LDFLAGS)
   LDDEPS    +=
   LIBS      += $(LDDEPS)
-  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
+  LINKCMD    = $(CC) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -44,7 +44,7 @@ endif
 ifeq ($(config),release)
   OBJDIR     = obj/Release/telemetry_debug
   TARGETDIR  = .
-  TARGET     = $(TARGETDIR)/libtelemetry_debug.a
+  TARGET     = $(TARGETDIR)/telemetry_debug.exe
   DEFINES   += -DNDEBUG
   INCLUDES  += -I../nanovg -I../telemetry
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
@@ -54,7 +54,7 @@ ifeq ($(config),release)
   ALL_LDFLAGS   += $(LDFLAGS) -s
   LDDEPS    +=
   LIBS      += $(LDDEPS)
-  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
+  LINKCMD    = $(CC) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -66,7 +66,7 @@ endif
 ifeq ($(config),debug64)
   OBJDIR     = obj/x64/Debug/telemetry_debug
   TARGETDIR  = .
-  TARGET     = $(TARGETDIR)/libtelemetry_debug.a
+  TARGET     = $(TARGETDIR)/telemetry_debug.exe
   DEFINES   += -DDEBUG
   INCLUDES  += -I../nanovg -I../telemetry
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
@@ -76,7 +76,7 @@ ifeq ($(config),debug64)
   ALL_LDFLAGS   += $(LDFLAGS) -m64 -L/usr/lib64
   LDDEPS    +=
   LIBS      += $(LDDEPS)
-  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
+  LINKCMD    = $(CC) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -88,7 +88,7 @@ endif
 ifeq ($(config),release64)
   OBJDIR     = obj/x64/Release/telemetry_debug
   TARGETDIR  = .
-  TARGET     = $(TARGETDIR)/libtelemetry_debug.a
+  TARGET     = $(TARGETDIR)/telemetry_debug.exe
   DEFINES   += -DNDEBUG
   INCLUDES  += -I../nanovg -I../telemetry
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
@@ -98,7 +98,7 @@ ifeq ($(config),release64)
   ALL_LDFLAGS   += $(LDFLAGS) -s -m64 -L/usr/lib64
   LDDEPS    +=
   LIBS      += $(LDDEPS)
-  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
+  LINKCMD    = $(CC) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -110,7 +110,7 @@ endif
 ifeq ($(config),debug32)
   OBJDIR     = obj/x32/Debug/telemetry_debug
   TARGETDIR  = .
-  TARGET     = $(TARGETDIR)/libtelemetry_debug.a
+  TARGET     = $(TARGETDIR)/telemetry_debug.exe
   DEFINES   += -DDEBUG
   INCLUDES  += -I../nanovg -I../telemetry
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
@@ -120,7 +120,7 @@ ifeq ($(config),debug32)
   ALL_LDFLAGS   += $(LDFLAGS) -m32 -L/usr/lib32
   LDDEPS    +=
   LIBS      += $(LDDEPS)
-  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
+  LINKCMD    = $(CC) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -132,7 +132,7 @@ endif
 ifeq ($(config),release32)
   OBJDIR     = obj/x32/Release/telemetry_debug
   TARGETDIR  = .
-  TARGET     = $(TARGETDIR)/libtelemetry_debug.a
+  TARGET     = $(TARGETDIR)/telemetry_debug.exe
   DEFINES   += -DNDEBUG
   INCLUDES  += -I../nanovg -I../telemetry
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
@@ -142,7 +142,7 @@ ifeq ($(config),release32)
   ALL_LDFLAGS   += $(LDFLAGS) -s -m32 -L/usr/lib32
   LDDEPS    +=
   LIBS      += $(LDDEPS)
-  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
+  LINKCMD    = $(CC) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
