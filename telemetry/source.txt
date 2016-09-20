@@ -1,0 +1,1 @@
+https://github.com/mavlink/c_library_v1/commit/32b5daf929cfa2ce8a9fd53d7fdca2a9585b65fd

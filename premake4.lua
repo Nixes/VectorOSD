@@ -9,8 +9,8 @@ solution "nanovg"
    	project "nanovg"
 		language "C"
 		kind "StaticLib"
-		includedirs { "src" }
-		files { "src/*.c" }
+		includedirs { "nanovg" }
+		files { "nanovg/*.c" }
 		targetdir("build")
 		defines { "_CRT_SECURE_NO_WARNINGS" } --,"FONS_USE_FREETYPE" } Uncomment to compile with FreeType support
 
@@ -22,12 +22,11 @@ solution "nanovg"
 			defines { "NDEBUG" }
 			flags { "Optimize", "ExtraWarnings"}
 
-
     project "VectorOSD"
 		kind "ConsoleApp"
 			language "C++"
-			files { "example/VectorOSD.cpp", "example/demo.c", "example/perf.c" }
-			includedirs { "src", "example" }
+			files { "src/VectorOSD.cpp", "src/perf.c" }
+			includedirs { "nanovg", "src" }
 			targetdir("build")
 			links { "nanovg" }
 
@@ -51,3 +50,19 @@ solution "nanovg"
             configuration "Release"
                 defines { "NDEBUG" }
                 flags { "Optimize", "ExtraWarnings"}
+
+
+				project "telemetry_debug"
+				language "C"
+				kind "StaticLib"
+				includedirs { "nanovg" , "telemetry"}
+				files { "src/telemetry_debug.cpp" }
+				targetdir("build")
+
+				configuration "Debug"
+					defines { "DEBUG" }
+					flags { "Symbols", "ExtraWarnings"}
+
+				configuration "Release"
+					defines { "NDEBUG" }
+					flags { "Optimize", "ExtraWarnings"}
