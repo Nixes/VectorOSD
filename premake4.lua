@@ -9,8 +9,8 @@ solution "nanovg"
    	project "nanovg"
 		language "C"
 		kind "StaticLib"
-		includedirs { "nanovg" }
-		files { "nanovg/*.c" }
+		includedirs { "deps/nanovg" }
+		files { "deps/nanovg/*.c" }
 		targetdir("build")
 		defines { "_CRT_SECURE_NO_WARNINGS" } --,"FONS_USE_FREETYPE" } Uncomment to compile with FreeType support
 
@@ -26,7 +26,7 @@ solution "nanovg"
 		kind "ConsoleApp"
 			language "C++"
 			files { "src/VectorOSD.cpp", "src/perf.c" }
-			includedirs { "nanovg", "src" }
+			includedirs { "deps/nanovg", "src" }
 			targetdir("build")
 			links { "nanovg" }
 
@@ -55,7 +55,7 @@ solution "nanovg"
 				project "telemetry_debug"
 				language "C"
 				kind "ConsoleApp"
-				includedirs { "nanovg" , "telemetry"}
+				includedirs { "deps/nanovg" , "deps/mavlink", "deps/libserialport"}
 				files { "src/telemetry_debug.cpp" }
 				targetdir("build")
 

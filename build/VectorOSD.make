@@ -24,7 +24,7 @@ ifeq ($(config),debug)
   TARGETDIR  = .
   TARGET     = $(TARGETDIR)/VectorOSD.exe
   DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DDEBUG
-  INCLUDES  += -I../nanovg -I../src
+  INCLUDES  += -I../deps/nanovg -I../src
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -g -Wall -Wextra
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
@@ -46,7 +46,7 @@ ifeq ($(config),release)
   TARGETDIR  = .
   TARGET     = $(TARGETDIR)/VectorOSD.exe
   DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DNDEBUG
-  INCLUDES  += -I../nanovg -I../src
+  INCLUDES  += -I../deps/nanovg -I../src
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -O2 -Wall -Wextra
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
@@ -68,7 +68,7 @@ ifeq ($(config),debug64)
   TARGETDIR  = .
   TARGET     = $(TARGETDIR)/VectorOSD.exe
   DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DDEBUG
-  INCLUDES  += -I../nanovg -I../src
+  INCLUDES  += -I../deps/nanovg -I../src
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -g -Wall -Wextra -m64
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
@@ -90,7 +90,7 @@ ifeq ($(config),release64)
   TARGETDIR  = .
   TARGET     = $(TARGETDIR)/VectorOSD.exe
   DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DNDEBUG
-  INCLUDES  += -I../nanovg -I../src
+  INCLUDES  += -I../deps/nanovg -I../src
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -O2 -Wall -Wextra -m64
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
@@ -112,7 +112,7 @@ ifeq ($(config),debug32)
   TARGETDIR  = .
   TARGET     = $(TARGETDIR)/VectorOSD.exe
   DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DDEBUG
-  INCLUDES  += -I../nanovg -I../src
+  INCLUDES  += -I../deps/nanovg -I../src
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -g -Wall -Wextra -m32
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
@@ -134,7 +134,7 @@ ifeq ($(config),release32)
   TARGETDIR  = .
   TARGET     = $(TARGETDIR)/VectorOSD.exe
   DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DNDEBUG
-  INCLUDES  += -I../nanovg -I../src
+  INCLUDES  += -I../deps/nanovg -I../src
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -O2 -Wall -Wextra -m32
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
