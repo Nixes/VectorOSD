@@ -20,58 +20,9 @@
 #include <math.h>
 #include <string.h>
 #include "../lib/timer/timer.h"
-#include "../settings.h"
-#include "../eeprom.h"
 
 namespace telemetry
 {
-
-namespace settings
-{
-
-#define EEPROM_ADDR_MIN_CELL_VOLTAGE   _eeprom_float (TELEMETRY_EEPROM_OFFSET)
-#define EEPROM_ADDR_NOM_CELL_VOLTAGE   _eeprom_float (TELEMETRY_EEPROM_OFFSET + 4)
-#define EEPROM_ADDR_MAX_CELL_VOLTAGE   _eeprom_float (TELEMETRY_EEPROM_OFFSET + 8)
-#define EEPROM_ADDR_LOW_VOLTAGE        _eeprom_float (TELEMETRY_EEPROM_OFFSET + 12)
-#define EEPROM_ADDR_RSSI_LOW_THRESHOLD _eeprom_byte  (TELEMETRY_EEPROM_OFFSET + 16)
-#define EEPROM_ADDR_CALLSIGN           _eeprom_str   (TELEMETRY_EEPROM_OFFSET + 17)
-
-const char __opt_mincv [] PROGMEM = "MINCV";
-const char __opt_nomcv [] PROGMEM = "NOMCV";
-const char __opt_maxcv [] PROGMEM = "MAXCV";
-const char __opt_lowcv [] PROGMEM = "LOWCV";
-const char __opt_rlt   [] PROGMEM = "RLT";
-const char __opt_csign [] PROGMEM = "CSIGN";
-
-const ::settings::option_t __settings [] PROGMEM = {
-	declare_float_option (__opt_mincv, EEPROM_ADDR_MIN_CELL_VOLTAGE),
-	declare_float_option (__opt_nomcv, EEPROM_ADDR_NOM_CELL_VOLTAGE),
-	declare_float_option (__opt_maxcv, EEPROM_ADDR_MAX_CELL_VOLTAGE),
-	declare_float_option (__opt_lowcv, EEPROM_ADDR_LOW_VOLTAGE),
-	declare_uint8_option (__opt_rlt,   EEPROM_ADDR_RSSI_LOW_THRESHOLD),
-	declare_str_option   (__opt_csign, EEPROM_ADDR_CALLSIGN, TELEMETRY_CALLSIGN_LENGTH),
-};
-
-struct settings_t
-{
-	float min_cell_voltage;
-	float nom_cell_voltage;
-	float max_cell_voltage;
-	float low_cell_voltage;
-	uint8_t rssi_low_thresh;
-	char callsign [TELEMETRY_CALLSIGN_LENGTH + 1];
-
-	settings_t ()
-	{
-		min_cell_voltage = eeprom_read_float (EEPROM_ADDR_MIN_CELL_VOLTAGE);
-		nom_cell_voltage = eeprom_read_float (EEPROM_ADDR_NOM_CELL_VOLTAGE);
-		max_cell_voltage = eeprom_read_float (EEPROM_ADDR_MAX_CELL_VOLTAGE);
-		low_cell_voltage = eeprom_read_float (EEPROM_ADDR_LOW_VOLTAGE);
-		rssi_low_thresh = eeprom_read_byte (EEPROM_ADDR_RSSI_LOW_THRESHOLD);
-		eeprom_read_block (callsign, EEPROM_ADDR_CALLSIGN, TELEMETRY_CALLSIGN_LENGTH);
-		callsign [TELEMETRY_CALLSIGN_LENGTH] = 0;
-	}
-};
 
 void init ()
 {
