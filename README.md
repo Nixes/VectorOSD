@@ -15,6 +15,12 @@ Install dependencies
 sudo apt-get install premake4 make build-essential libglew-dev libglfw3-dev
 ```
 
+Clone repo
+```
+git clone --recursive https://github.com/Nixes/VectorOSD.git
+cd VectorOSD
+```
+
 Generate makefiles
 ```
 premake4 gmake
@@ -49,6 +55,12 @@ pacman -S mingw-w64-x86_64-glew
 Install glfw
 ```
 pacman -S mingw-w64-x86_64-glfw
+```
+
+Clone repo
+```
+git clone --recursive https://github.com/Nixes/VectorOSD.git
+cd VectorOSD
 ```
 
 If you want to update build scripts, Run
