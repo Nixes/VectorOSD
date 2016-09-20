@@ -22,12 +22,11 @@ solution "nanovg"
 			defines { "NDEBUG" }
 			flags { "Optimize", "ExtraWarnings"}
 
-
     project "VectorOSD"
 		kind "ConsoleApp"
 			language "C++"
 			files { "src/VectorOSD.cpp", "src/perf.c" }
-			includedirs { "nanovg", "src", "telemetry" }
+			includedirs { "nanovg", "src" }
 			targetdir("build")
 			links { "nanovg" }
 
@@ -51,3 +50,19 @@ solution "nanovg"
             configuration "Release"
                 defines { "NDEBUG" }
                 flags { "Optimize", "ExtraWarnings"}
+
+
+				project "telemetry_debug"
+				language "C"
+				kind "StaticLib"
+				includedirs { "nanovg" , "telemetry"}
+				files { "src/telemetry_debug.cpp" }
+				targetdir("build")
+
+				configuration "Debug"
+					defines { "DEBUG" }
+					flags { "Symbols", "ExtraWarnings"}
+
+				configuration "Release"
+					defines { "NDEBUG" }
+					flags { "Optimize", "ExtraWarnings"}
