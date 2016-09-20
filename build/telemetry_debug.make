@@ -20,19 +20,19 @@ ifndef RESCOMP
 endif
 
 ifeq ($(config),debug)
-  OBJDIR     = obj/Debug/VectorOSD
+  OBJDIR     = obj/Debug/telemetry_debug
   TARGETDIR  = .
-  TARGET     = $(TARGETDIR)/VectorOSD.exe
-  DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DDEBUG
-  INCLUDES  += -I../nanovg -I../src
+  TARGET     = $(TARGETDIR)/libtelemetry_debug.a
+  DEFINES   += -DDEBUG
+  INCLUDES  += -I../nanovg -I../telemetry
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -g -Wall -Wextra
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  ALL_LDFLAGS   += $(LDFLAGS) -L.
-  LDDEPS    += libnanovg.a
-  LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
-  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
+  ALL_LDFLAGS   += $(LDFLAGS)
+  LDDEPS    +=
+  LIBS      += $(LDDEPS)
+  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -42,19 +42,19 @@ ifeq ($(config),debug)
 endif
 
 ifeq ($(config),release)
-  OBJDIR     = obj/Release/VectorOSD
+  OBJDIR     = obj/Release/telemetry_debug
   TARGETDIR  = .
-  TARGET     = $(TARGETDIR)/VectorOSD.exe
-  DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DNDEBUG
-  INCLUDES  += -I../nanovg -I../src
+  TARGET     = $(TARGETDIR)/libtelemetry_debug.a
+  DEFINES   += -DNDEBUG
+  INCLUDES  += -I../nanovg -I../telemetry
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -O2 -Wall -Wextra
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  ALL_LDFLAGS   += $(LDFLAGS) -L. -s
-  LDDEPS    += libnanovg.a
-  LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
-  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
+  ALL_LDFLAGS   += $(LDFLAGS) -s
+  LDDEPS    +=
+  LIBS      += $(LDDEPS)
+  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -64,19 +64,19 @@ ifeq ($(config),release)
 endif
 
 ifeq ($(config),debug64)
-  OBJDIR     = obj/x64/Debug/VectorOSD
+  OBJDIR     = obj/x64/Debug/telemetry_debug
   TARGETDIR  = .
-  TARGET     = $(TARGETDIR)/VectorOSD.exe
-  DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DDEBUG
-  INCLUDES  += -I../nanovg -I../src
+  TARGET     = $(TARGETDIR)/libtelemetry_debug.a
+  DEFINES   += -DDEBUG
+  INCLUDES  += -I../nanovg -I../telemetry
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -g -Wall -Wextra -m64
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  ALL_LDFLAGS   += $(LDFLAGS) -L. -m64 -L/usr/lib64
-  LDDEPS    += libnanovg.a
-  LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
-  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
+  ALL_LDFLAGS   += $(LDFLAGS) -m64 -L/usr/lib64
+  LDDEPS    +=
+  LIBS      += $(LDDEPS)
+  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -86,19 +86,19 @@ ifeq ($(config),debug64)
 endif
 
 ifeq ($(config),release64)
-  OBJDIR     = obj/x64/Release/VectorOSD
+  OBJDIR     = obj/x64/Release/telemetry_debug
   TARGETDIR  = .
-  TARGET     = $(TARGETDIR)/VectorOSD.exe
-  DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DNDEBUG
-  INCLUDES  += -I../nanovg -I../src
+  TARGET     = $(TARGETDIR)/libtelemetry_debug.a
+  DEFINES   += -DNDEBUG
+  INCLUDES  += -I../nanovg -I../telemetry
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -O2 -Wall -Wextra -m64
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  ALL_LDFLAGS   += $(LDFLAGS) -L. -s -m64 -L/usr/lib64
-  LDDEPS    += libnanovg.a
-  LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
-  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
+  ALL_LDFLAGS   += $(LDFLAGS) -s -m64 -L/usr/lib64
+  LDDEPS    +=
+  LIBS      += $(LDDEPS)
+  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -108,19 +108,19 @@ ifeq ($(config),release64)
 endif
 
 ifeq ($(config),debug32)
-  OBJDIR     = obj/x32/Debug/VectorOSD
+  OBJDIR     = obj/x32/Debug/telemetry_debug
   TARGETDIR  = .
-  TARGET     = $(TARGETDIR)/VectorOSD.exe
-  DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DDEBUG
-  INCLUDES  += -I../nanovg -I../src
+  TARGET     = $(TARGETDIR)/libtelemetry_debug.a
+  DEFINES   += -DDEBUG
+  INCLUDES  += -I../nanovg -I../telemetry
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -g -Wall -Wextra -m32
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  ALL_LDFLAGS   += $(LDFLAGS) -L. -m32 -L/usr/lib32
-  LDDEPS    += libnanovg.a
-  LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
-  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
+  ALL_LDFLAGS   += $(LDFLAGS) -m32 -L/usr/lib32
+  LDDEPS    +=
+  LIBS      += $(LDDEPS)
+  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -130,19 +130,19 @@ ifeq ($(config),debug32)
 endif
 
 ifeq ($(config),release32)
-  OBJDIR     = obj/x32/Release/VectorOSD
+  OBJDIR     = obj/x32/Release/telemetry_debug
   TARGETDIR  = .
-  TARGET     = $(TARGETDIR)/VectorOSD.exe
-  DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DNDEBUG
-  INCLUDES  += -I../nanovg -I../src
+  TARGET     = $(TARGETDIR)/libtelemetry_debug.a
+  DEFINES   += -DNDEBUG
+  INCLUDES  += -I../nanovg -I../telemetry
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -O2 -Wall -Wextra -m32
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  ALL_LDFLAGS   += $(LDFLAGS) -L. -s -m32 -L/usr/lib32
-  LDDEPS    += libnanovg.a
-  LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
-  LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
+  ALL_LDFLAGS   += $(LDFLAGS) -s -m32 -L/usr/lib32
+  LDDEPS    +=
+  LIBS      += $(LDDEPS)
+  LINKCMD    = $(AR) -rcs $(TARGET) $(OBJECTS)
   define PREBUILDCMDS
   endef
   define PRELINKCMDS
@@ -152,8 +152,7 @@ ifeq ($(config),release32)
 endif
 
 OBJECTS := \
-	$(OBJDIR)/VectorOSD.o \
-	$(OBJDIR)/perf.o \
+	$(OBJDIR)/telemetry_debug.o \
 
 RESOURCES := \
 
@@ -171,7 +170,7 @@ all: $(TARGETDIR) $(OBJDIR) prebuild prelink $(TARGET)
 	@:
 
 $(TARGET): $(GCH) $(OBJECTS) $(LDDEPS) $(RESOURCES)
-	@echo Linking VectorOSD
+	@echo Linking telemetry_debug
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -192,7 +191,7 @@ else
 endif
 
 clean:
-	@echo Cleaning VectorOSD
+	@echo Cleaning telemetry_debug
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(OBJDIR)
@@ -210,16 +209,12 @@ prelink:
 ifneq (,$(PCH))
 $(GCH): $(PCH)
 	@echo $(notdir $<)
-	$(SILENT) $(CXX) -x c++-header $(ALL_CXXFLAGS) -MMD -MP $(DEFINES) $(INCLUDES) -o "$@" -MF "$(@:%.gch=%.d)" -c "$<"
+	$(SILENT) $(CC) -x c-header $(ALL_CFLAGS) -MMD -MP $(DEFINES) $(INCLUDES) -o "$@" -MF "$(@:%.gch=%.d)" -c "$<"
 endif
 
-$(OBJDIR)/VectorOSD.o: ../src/VectorOSD.cpp
+$(OBJDIR)/telemetry_debug.o: ../src/telemetry_debug.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/perf.o: ../src/perf.c
-	@echo $(notdir $<)
-	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 
 -include $(OBJECTS:%.o=%.d)
 ifneq (,$(PCH))
