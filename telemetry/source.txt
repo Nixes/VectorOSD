@@ -1,1 +1,1 @@
-https://github.com/UncleRus/MultiOSD/commit/57660551de449549308c8b0200d0a7065c12edef
+https://github.com/mavlink/c_library_v1/commit/32b5daf929cfa2ce8a9fd53d7fdca2a9585b65fd
