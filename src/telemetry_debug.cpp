@@ -28,9 +28,10 @@ int main() {
 
   printf("Opening port %s \n", desired_port);
   struct sp_port *port;
-  //sp_get_port_by_name(desired_port,&port);
-
-  //sp_open(port,SP_MODE_READ_WRITE );
+  sp_return error = sp_get_port_by_name(desired_port,&port);
+  if (error == SP_OK) {
+    sp_open(port,SP_MODE_READ_WRITE );
+  }
 
   return 0;
 }
