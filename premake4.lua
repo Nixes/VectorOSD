@@ -62,7 +62,9 @@ solution "nanovg"
 				configuration "Debug"
 					defines { "DEBUG" }
 					flags { "Symbols", "ExtraWarnings"}
+					links { "libserialport" }
 
 				configuration "Release"
 					defines { "NDEBUG" }
 					flags { "Optimize", "ExtraWarnings"}
+					links { "libserialport" }
