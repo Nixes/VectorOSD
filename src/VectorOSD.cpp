@@ -29,7 +29,6 @@
 
 // start VectorOSD specific dependencies
 #include "VectorOSD_widgets.hpp"
-#include "telemetry.h"
 // end VectorOSD specific dependencies
 
 
