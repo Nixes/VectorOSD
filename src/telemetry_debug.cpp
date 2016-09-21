@@ -7,8 +7,6 @@
 #include <libserialport.h> // cross platform serial port lib
 #include "common/mavlink.h"
 
-const char* desired_port = "COM8";
-
 struct sp_port *port;
 
 void list_ports() {
@@ -68,11 +66,16 @@ void readMav() {
   }
 }
 
-int main() {
+int main(int argc, char* args[] ) {
+  if (argc < 2) {
+    printf("You must specify a serial port to obtain telemetry data\n");
+    exit(1);
+  }
+
   list_ports();
 
-  printf("Opening port '%s' \n", desired_port);
-  sp_return error = sp_get_port_by_name(desired_port,&port);
+  printf("Opening port '%s' \n", args[1]);
+  sp_return error = sp_get_port_by_name(args[1],&port);
   if (error == SP_OK) {
     sp_set_baudrate(port,57600);
     error = sp_open(port,SP_MODE_READ);
