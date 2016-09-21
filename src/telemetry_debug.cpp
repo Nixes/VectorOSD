@@ -9,6 +9,8 @@
 
 const char* desired_port = "COM8";
 
+struct sp_port *port;
+
 void list_ports() {
   int i;
   struct sp_port **ports;
@@ -30,7 +32,6 @@ int main() {
   sleep(1);
 
   printf("Opening port '%s' \n", desired_port);
-  struct sp_port *port;
   sp_return error = sp_get_port_by_name(desired_port,&port);
   if (error == SP_OK) {
     sp_set_baudrate(port,57600);
@@ -38,11 +39,15 @@ int main() {
     if (error == SP_OK) {
       bool something = true;
       while(something) {
-        //sleep(2);
+        sleep(1);
         int bytes_waiting = sp_input_waiting(port);
         if (bytes_waiting > 0) {
           printf("Bytes waiting %i\n", bytes_waiting);
+          char byte_buff[512];
+          int byte_num = 0;
+          byte_num = sp_nonblocking_read(port,byte_buff,512);
         }
+        fflush(stdout);
       }
 
       sp_close(port);
