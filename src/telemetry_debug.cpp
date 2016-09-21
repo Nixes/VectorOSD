@@ -96,7 +96,7 @@ int main(int argc, char* args[] ) {
   if (openSerialPort(args[1]) ) {
     while(true) {
 
-      usleep(2000); // can do something else in mean time
+      usleep(2000); // can do something else in mean time, but don't want to consume a whole cpu core
       if (sp_input_waiting(port) > 0){
         printf("Serial checked\n");
       }
