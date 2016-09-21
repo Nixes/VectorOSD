@@ -84,6 +84,7 @@ void readMav() {
             mavlink_attitude_t attitude_packet;
             mavlink_msg_attitude_decode(&msg, &attitude_packet);
             printf("Pitch %f, Yaw %f, Roll %f\n", attitude_packet.pitch, attitude_packet.yaw, attitude_packet.roll);
+						attitude_indicator.update(attitude_packet.roll,attitude_packet.pitch);
           break;
 
           default:
@@ -193,16 +194,16 @@ static void debugKeys(GLFWwindow* window, int key, int scancode, int action, int
 
 	// attitude debug keys
 	if (key == GLFW_KEY_LEFT && action != GLFW_RELEASE) {
-		attitude_indicator.update(-0.01,0);
+		attitude_indicator.updateDelta(-0.01,0);
 	}
 	if (key == GLFW_KEY_RIGHT && action != GLFW_RELEASE) {
-		attitude_indicator.update(0.01,0);
+		attitude_indicator.updateDelta(0.01,0);
 	}
 	if (key == GLFW_KEY_UP && action != GLFW_RELEASE) {
-		attitude_indicator.update(0,0.01);
+		attitude_indicator.updateDelta(0,0.01);
 	}
 	if (key == GLFW_KEY_DOWN && action != GLFW_RELEASE) {
-		attitude_indicator.update(0,-0.01);
+		attitude_indicator.updateDelta(0,-0.01);
 	}
 
 	// compass debug keys
