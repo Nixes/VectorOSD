@@ -15,8 +15,9 @@ void list_ports() {
 
   sp_return error = sp_list_ports(&ports);
   if (error == SP_OK) {
+    printf("Valid serial ports:\n");
     for (i = 0; ports[i]; i++) {
-      printf("Found port: '%s'\n", sp_get_port_name(ports[i]));
+      printf("  Found port: '%s'\n", sp_get_port_name(ports[i]));
     }
     sp_free_port_list(ports);
   } else {
@@ -66,37 +67,44 @@ void readMav() {
   }
 }
 
+bool openSerialPort(char* port_name) {
+  printf("Opening port '%s' \n", port_name);
+  sp_return error = sp_get_port_by_name(port_name,&port);
+  if (error == SP_OK) {
+    sp_set_baudrate(port,57600);
+    error = sp_open(port,SP_MODE_READ);
+    if (error == SP_OK) {
+      return true;
+    } else {
+      printf("Error opening serial device\n");
+      return false;
+    }
+  } else {
+    printf("Error finding serial device\n");
+    return false;
+  }
+}
+
 int main(int argc, char* args[] ) {
+  list_ports();
+
   if (argc < 2) {
     printf("You must specify a serial port to obtain telemetry data\n");
     exit(1);
   }
 
-  list_ports();
+  if (openSerialPort(args[1]) ) {
+    while(true) {
 
-  printf("Opening port '%s' \n", args[1]);
-  sp_return error = sp_get_port_by_name(args[1],&port);
-  if (error == SP_OK) {
-    sp_set_baudrate(port,57600);
-    error = sp_open(port,SP_MODE_READ);
-    if (error == SP_OK) {
-      bool something = true;
-      while(something) {
-
-        usleep(2000); // can do something else in mean time
-        if (sp_input_waiting(port) > 0){
-          printf("Serial checked\n");
-        }
-        readMav();
-        fflush(stdout);
+      usleep(2000); // can do something else in mean time
+      if (sp_input_waiting(port) > 0){
+        printf("Serial checked\n");
       }
-
-      sp_close(port);
-    } else {
-      printf("Error opening serial device\n");
+      readMav();
+      fflush(stdout);
     }
-  } else {
-    printf("Error finding serial device\n");
+
+    sp_close(port);
   }
 
 
