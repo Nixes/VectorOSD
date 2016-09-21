@@ -89,12 +89,28 @@ void readMav() {
 
           default:
             printf("   Got unknown %d",msg.msgid);
-          //Do nothing
+          	// Do nothing
           break;
         }
       }
     }
   }
+}
+
+// request a faster update rate for attitude from the flight controller
+void requestFastUpdate() {
+	mavlink_message_t msg;
+	mavlink_message_interval_t interval;
+
+	interval.interval_us = 500000; // a ~60hz update rate in microseconds 16666
+	interval.message_id = MAVLINK_MSG_ID_ATTITUDE;
+
+	mavlink_msg_message_interval_encode(255, 200, &msg, &interval);
+
+	uint8_t buf[256];
+	int buf_size = mavlink_msg_to_send_buffer(buf, &msg);
+	//p_sensorsPort->write_message(command);
+	sp_blocking_write(port,buf,buf_size,1000);
 }
 
 bool openSerialPort(char* port_name) {
@@ -221,7 +237,7 @@ void render(NVGcontext* vg, double delta_time) {
 	log_box.render(vg,delta_time);
 	power_stats.render(vg,delta_time);
 	bearing_indicator.render(vg);
-	drawGlyph(vg,glyph_power);
+	//drawGlyph(vg,glyph_power);
 
 	attitude_indicator.render(vg); // attitude indicator must be the last thing to render as it does some complex transformations
 }
@@ -240,6 +256,7 @@ int main(int argc, char* args[] ) {
 	if (!openSerialPort(args[1]) ) {
 		exit(1);
 	}
+	requestFastUpdate();
 
 	GLFWwindow* window;
 	NVGcontext* vg = NULL;
