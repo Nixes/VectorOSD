@@ -28,6 +28,43 @@ void list_ports() {
 }
 
 
+void readMav() {
+  while ( sp_input_waiting(port) > 0) {
+    mavlink_message_t msg;
+    mavlink_status_t status;
+    //printf("Bytes waiting %i\n", bytes_waiting);
+    char byte_buff[1];
+    if ( sp_nonblocking_read(port,byte_buff,1) ) {
+      if(mavlink_parse_char(MAVLINK_COMM_1, byte_buff[0], &msg, &status)) {
+        printf("  Found mavlink packet\n");
+        // determine type of message
+        switch(msg.msgid) {
+          case MAVLINK_MSG_ID_HEARTBEAT: {
+            printf("   Got Heartbeat\n");
+          }
+          break;
+
+          case MAVLINK_MSG_ID_VFR_HUD:
+            printf("   Got VFR HUD\n");
+          break;
+
+          case MAVLINK_MSG_ID_ATTITUDE:
+            printf("   Got Attitude\n");
+            mavlink_attitude_t packet;
+            mavlink_msg_attitude_decode(&msg, &packet);
+            printf("Pitch %f, Yaw %f, Roll %f\n", packet.pitch, packet.yaw, packet.roll);
+          break;
+
+          default:
+            printf("   Got unknown %d",msg.msgid);
+          //Do nothing
+          break;
+        }
+      }
+    }
+  }
+}
+
 int main() {
   list_ports();
 
@@ -40,41 +77,11 @@ int main() {
       bool something = true;
       while(something) {
 
-        //usleep(200000); // can do something else in mean time
+        usleep(2000); // can do something else in mean time
         if (sp_input_waiting(port) > 0){
           printf("Serial checked\n");
         }
-        while ( sp_input_waiting(port) > 0) {
-          mavlink_message_t msg;
-          mavlink_status_t status;
-          //printf("Bytes waiting %i\n", bytes_waiting);
-          char byte_buff[1];
-          if ( sp_nonblocking_read(port,byte_buff,1) ) {
-            if(mavlink_parse_char(MAVLINK_COMM_1, byte_buff[0], &msg, &status)) {
-              printf("  Found mavlink packet\n");
-              // determine type of message
-              switch(msg.msgid) {
-          			case MAVLINK_MSG_ID_HEARTBEAT: {
-                  printf("   Got Heartbeat\n");
-          			}
-          			break;
-
-          			case MAVLINK_MSG_ID_VFR_HUD:
-                  printf("   Got VFR HUD\n");
-          			break;
-
-          			case MAVLINK_MSG_ID_ATTITUDE:
-                  printf("   Got Attitude\n");
-          			break;
-
-          			default:
-                  printf("   Got unknown %d",msg.msgid);
-          			//Do nothing
-          			break;
-          		}
-            }
-          }
-        }
+        readMav();
         fflush(stdout);
       }
 
