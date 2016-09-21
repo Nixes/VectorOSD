@@ -27,6 +27,12 @@ void list_ports() {
   printf("\n");
 }
 
+void parse_serial(char *byte_buff, int byte_num) {
+  for(int i = 0; i < byte_num;i++){
+    printf("%c\n", byte_buff[i]);
+  }
+}
+
 int main() {
   list_ports();
   sleep(1);
@@ -39,13 +45,15 @@ int main() {
     if (error == SP_OK) {
       bool something = true;
       while(something) {
-        sleep(1);
+
+        sleep(1); // can do something else in mean time
         int bytes_waiting = sp_input_waiting(port);
         if (bytes_waiting > 0) {
           printf("Bytes waiting %i\n", bytes_waiting);
           char byte_buff[512];
           int byte_num = 0;
           byte_num = sp_nonblocking_read(port,byte_buff,512);
+          parse_serial(byte_buff,byte_num);
         }
         fflush(stdout);
       }
