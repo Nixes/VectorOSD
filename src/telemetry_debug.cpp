@@ -5,7 +5,7 @@
 #include <unistd.h> // for sleep function
 
 #include <libserialport.h> // cross platform serial port lib
-//#include "protocol.h"
+#include "common/mavlink.h"
 
 const char* desired_port = "COM8";
 
@@ -27,15 +27,9 @@ void list_ports() {
   printf("\n");
 }
 
-void parse_serial(char *byte_buff, int byte_num) {
-  for(int i = 0; i < byte_num;i++){
-    printf("%c\n", byte_buff[i]);
-  }
-}
 
 int main() {
   list_ports();
-  sleep(1);
 
   printf("Opening port '%s' \n", desired_port);
   sp_return error = sp_get_port_by_name(desired_port,&port);
@@ -46,14 +40,17 @@ int main() {
       bool something = true;
       while(something) {
 
-        sleep(1); // can do something else in mean time
-        int bytes_waiting = sp_input_waiting(port);
-        if (bytes_waiting > 0) {
+        sleep(0.5); // can do something else in mean time
+        mavlink_message_t msg;
+        mavlink_status_t status;
+        if (int bytes_waiting = sp_input_waiting(port) > 0) {
           printf("Bytes waiting %i\n", bytes_waiting);
-          char byte_buff[512];
-          int byte_num = 0;
-          byte_num = sp_nonblocking_read(port,byte_buff,512);
-          parse_serial(byte_buff,byte_num);
+          char byte_buff[1];
+          if ( sp_nonblocking_read(port,byte_buff,1) ) {
+            if(mavlink_parse_char(MAVLINK_COMM_1, byte_buff[0], &msg, &status)) {
+              printf("Found mavlink packet\n");
+            }
+          }
         }
         fflush(stdout);
       }
