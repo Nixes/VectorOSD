@@ -45,6 +45,8 @@ powerStats power_stats(50,550);
 attitudeIndicator attitude_indicator(300,50);
 bearingIndicator bearing_indicator(300,10);
 
+// provide global serial object
+struct sp_port *port;
 
 void errorcb(int error, const char* desc) {
 	printf("GLFW error %d: %s\n", error, desc);
@@ -329,8 +331,10 @@ int main(int argc, char* args[] ) {
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-
+		readMav();
 	}
+
+	sp_close(port); // close serial port
 
 	unloadAssets();
 
