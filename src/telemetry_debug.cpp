@@ -49,6 +49,20 @@ int main() {
           if ( sp_nonblocking_read(port,byte_buff,1) ) {
             if(mavlink_parse_char(MAVLINK_COMM_1, byte_buff[0], &msg, &status)) {
               printf("Found mavlink packet\n");
+              // determine type of message
+              switch(msg.msgid) {
+          			case MAVLINK_MSG_ID_HEARTBEAT: {
+                  printf("   Got Heartbeat\n");
+          			}
+          			break;
+          			case MAVLINK_MSG_ID_COMMAND_LONG:
+                  printf("   Got MSG\n");
+          			break;
+          			default:
+          			//Do nothing
+          			break;
+          		}
+
             }
           }
         }
