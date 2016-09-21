@@ -26,9 +26,9 @@ solution "nanovg"
 		kind "ConsoleApp"
 			language "C++"
 			files { "src/VectorOSD.cpp", "src/perf.c" }
-			includedirs { "deps/nanovg", "src" }
+			includedirs { "deps/nanovg", "deps/mavlink", "deps/libserialport", "src" }
 			targetdir("build")
-			links { "nanovg" }
+			links { "nanovg", "libserialport" }
 
             configuration { "linux" }
                 linkoptions { "`pkg-config --libs glfw3`" }

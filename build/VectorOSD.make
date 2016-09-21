@@ -24,14 +24,14 @@ ifeq ($(config),debug)
   TARGETDIR  = .
   TARGET     = $(TARGETDIR)/VectorOSD.exe
   DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DDEBUG
-  INCLUDES  += -I../deps/nanovg -I../src
+  INCLUDES  += -I../deps/nanovg -I../deps/mavlink -I../deps/libserialport -I../src
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -g -Wall -Wextra
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   ALL_LDFLAGS   += $(LDFLAGS) -L.
   LDDEPS    += libnanovg.a
-  LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
+  LIBS      += $(LDDEPS) -llibserialport -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
   LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -46,14 +46,14 @@ ifeq ($(config),release)
   TARGETDIR  = .
   TARGET     = $(TARGETDIR)/VectorOSD.exe
   DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DNDEBUG
-  INCLUDES  += -I../deps/nanovg -I../src
+  INCLUDES  += -I../deps/nanovg -I../deps/mavlink -I../deps/libserialport -I../src
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -O2 -Wall -Wextra
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   ALL_LDFLAGS   += $(LDFLAGS) -L. -s
   LDDEPS    += libnanovg.a
-  LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
+  LIBS      += $(LDDEPS) -llibserialport -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
   LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -68,14 +68,14 @@ ifeq ($(config),debug64)
   TARGETDIR  = .
   TARGET     = $(TARGETDIR)/VectorOSD.exe
   DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DDEBUG
-  INCLUDES  += -I../deps/nanovg -I../src
+  INCLUDES  += -I../deps/nanovg -I../deps/mavlink -I../deps/libserialport -I../src
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -g -Wall -Wextra -m64
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   ALL_LDFLAGS   += $(LDFLAGS) -L. -m64 -L/usr/lib64
   LDDEPS    += libnanovg.a
-  LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
+  LIBS      += $(LDDEPS) -llibserialport -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
   LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -90,14 +90,14 @@ ifeq ($(config),release64)
   TARGETDIR  = .
   TARGET     = $(TARGETDIR)/VectorOSD.exe
   DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DNDEBUG
-  INCLUDES  += -I../deps/nanovg -I../src
+  INCLUDES  += -I../deps/nanovg -I../deps/mavlink -I../deps/libserialport -I../src
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -O2 -Wall -Wextra -m64
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   ALL_LDFLAGS   += $(LDFLAGS) -L. -s -m64 -L/usr/lib64
   LDDEPS    += libnanovg.a
-  LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
+  LIBS      += $(LDDEPS) -llibserialport -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
   LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -112,14 +112,14 @@ ifeq ($(config),debug32)
   TARGETDIR  = .
   TARGET     = $(TARGETDIR)/VectorOSD.exe
   DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DDEBUG
-  INCLUDES  += -I../deps/nanovg -I../src
+  INCLUDES  += -I../deps/nanovg -I../deps/mavlink -I../deps/libserialport -I../src
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -g -Wall -Wextra -m32
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   ALL_LDFLAGS   += $(LDFLAGS) -L. -m32 -L/usr/lib32
   LDDEPS    += libnanovg.a
-  LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
+  LIBS      += $(LDDEPS) -llibserialport -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
   LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
@@ -134,14 +134,14 @@ ifeq ($(config),release32)
   TARGETDIR  = .
   TARGET     = $(TARGETDIR)/VectorOSD.exe
   DEFINES   += -DNANOVG_GLEW -D_CRT_SECURE_NO_WARNINGS -DNDEBUG
-  INCLUDES  += -I../deps/nanovg -I../src
+  INCLUDES  += -I../deps/nanovg -I../deps/mavlink -I../deps/libserialport -I../src
   ALL_CPPFLAGS  += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS    += $(CFLAGS) $(ALL_CPPFLAGS) $(ARCH) -O2 -Wall -Wextra -m32
   ALL_CXXFLAGS  += $(CXXFLAGS) $(ALL_CFLAGS)
   ALL_RESFLAGS  += $(RESFLAGS) $(DEFINES) $(INCLUDES)
   ALL_LDFLAGS   += $(LDFLAGS) -L. -s -m32 -L/usr/lib32
   LDDEPS    += libnanovg.a
-  LIBS      += $(LDDEPS) -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
+  LIBS      += $(LDDEPS) -llibserialport -lglfw3 -lgdi32 -lwinmm -luser32 -lglew32 -lglu32 -lopengl32 -lkernel32
   LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(ALL_LDFLAGS) $(LIBS)
   define PREBUILDCMDS
   endef
