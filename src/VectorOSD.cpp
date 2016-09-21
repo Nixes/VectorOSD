@@ -29,6 +29,8 @@
 
 // start VectorOSD specific dependencies
 #include "VectorOSD_widgets.hpp"
+#include <libserialport.h> // cross platform serial port lib
+#include "common/mavlink.h" // mavlink headers
 // end VectorOSD specific dependencies
 
 
@@ -51,6 +53,64 @@ void errorcb(int error, const char* desc) {
 int blowup = 0;
 int premult = 0;
 
+
+void readMav() {
+  mavlink_message_t msg;
+  mavlink_status_t status;
+  while ( sp_input_waiting(port) > 0) {
+    //printf("Bytes waiting %i\n", bytes_waiting);
+    char byte_buff[1];
+    if ( sp_nonblocking_read(port,byte_buff,1) ) {
+      if(mavlink_parse_char(MAVLINK_COMM_1, byte_buff[0], &msg, &status)) {
+        printf("  Found mavlink packet\n");
+        // determine type of message
+        switch(msg.msgid) {
+          case MAVLINK_MSG_ID_HEARTBEAT: {
+            printf("   Got Heartbeat\n");
+          }
+          break;
+
+          case MAVLINK_MSG_ID_VFR_HUD:
+            printf("   Got VFR HUD\n");
+            mavlink_vfr_hud_t vfr_packet;
+            mavlink_msg_vfr_hud_decode(&msg, &vfr_packet);
+            printf("Current heading %i\n",vfr_packet.heading);
+          break;
+
+          case MAVLINK_MSG_ID_ATTITUDE:
+            printf("   Got Attitude\n");
+            mavlink_attitude_t attitude_packet;
+            mavlink_msg_attitude_decode(&msg, &attitude_packet);
+            printf("Pitch %f, Yaw %f, Roll %f\n", attitude_packet.pitch, attitude_packet.yaw, attitude_packet.roll);
+          break;
+
+          default:
+            printf("   Got unknown %d",msg.msgid);
+          //Do nothing
+          break;
+        }
+      }
+    }
+  }
+}
+
+bool openSerialPort(char* port_name) {
+  printf("Opening port '%s' \n", port_name);
+  sp_return error = sp_get_port_by_name(port_name,&port);
+  if (error == SP_OK) {
+    sp_set_baudrate(port,57600);
+    error = sp_open(port,SP_MODE_READ);
+    if (error == SP_OK) {
+      return true;
+    } else {
+      printf("Error opening serial device\n");
+      return false;
+    }
+  } else {
+    printf("Error finding serial device\n");
+    return false;
+  }
+}
 
 void drawGlyph(NVGcontext* vg, NSVGimage* image) {
 	NSVGshape* shape;
@@ -168,7 +228,16 @@ void init() {
 	log_box.log("Adding Assets");
 }
 
-int main() {
+int main(int argc, char* args[] ) {
+	if (argc < 2) {
+		printf("You must specify a serial port to obtain telemetry data\n");
+		exit(1);
+	}
+
+	if (!openSerialPort(args[1]) ) {
+		exit(1);
+	}
+
 	GLFWwindow* window;
 	NVGcontext* vg = NULL;
 	PerfGraph fps;
@@ -260,6 +329,7 @@ int main() {
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
 	}
 
 	unloadAssets();
