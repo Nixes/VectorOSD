@@ -29,9 +29,9 @@ void list_ports() {
 
 
 void readMav() {
+  mavlink_message_t msg;
+  mavlink_status_t status;
   while ( sp_input_waiting(port) > 0) {
-    mavlink_message_t msg;
-    mavlink_status_t status;
     //printf("Bytes waiting %i\n", bytes_waiting);
     char byte_buff[1];
     if ( sp_nonblocking_read(port,byte_buff,1) ) {
@@ -46,13 +46,16 @@ void readMav() {
 
           case MAVLINK_MSG_ID_VFR_HUD:
             printf("   Got VFR HUD\n");
+            mavlink_vfr_hud_t vfr_packet;
+            mavlink_msg_vfr_hud_decode(&msg, &vfr_packet);
+            printf("Current heading %i\n",vfr_packet.heading);
           break;
 
           case MAVLINK_MSG_ID_ATTITUDE:
             printf("   Got Attitude\n");
-            mavlink_attitude_t packet;
-            mavlink_msg_attitude_decode(&msg, &packet);
-            printf("Pitch %f, Yaw %f, Roll %f\n", packet.pitch, packet.yaw, packet.roll);
+            mavlink_attitude_t attitude_packet;
+            mavlink_msg_attitude_decode(&msg, &attitude_packet);
+            printf("Pitch %f, Yaw %f, Roll %f\n", attitude_packet.pitch, attitude_packet.yaw, attitude_packet.roll);
           break;
 
           default:
