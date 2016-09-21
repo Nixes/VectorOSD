@@ -370,9 +370,13 @@ public:
     renderAngleLines(vg);
   }
 
-  void update(float delta_roll ,float delta_pitch) {
+  void updateDelta(float delta_roll ,float delta_pitch) {
     roll+= delta_roll;
     pitch+= delta_pitch;
+  }
+  void update(float tmp_roll, float tmp_pitch) {
+    roll = tmp_roll;
+    pitch = tmp_pitch;
   }
 };
 
