@@ -280,24 +280,27 @@ private:
   const int pitch_markers_num = 8; // how many pitch marker lines to show
   const int pitch_markers_interval = 5; // draw every 5 degrees
 
-  str_attitude interpolateAngles() {
+  str_attitude interpolateAttitide() {
     float difference_roll = attitude.roll - previous_attitude.roll;
     float difference_pitch = attitude.pitch - previous_attitude.pitch;
     float difference_yaw = attitude.yaw - previous_attitude.yaw;
 
     str_attitude animated_attitude = attitude;
     printf("Current animation amount %f, current %f, max %f\n", animationAmount(current_anim_time,max_anim_time), current_anim_time, max_anim_time);
+
     animated_attitude.roll = previous_attitude.roll + (difference_roll * animationAmount(current_anim_time,max_anim_time) );
+    animated_attitude.pitch = previous_attitude.pitch + (difference_pitch * animationAmount(current_anim_time,max_anim_time) );
+
     return animated_attitude;
   }
 
   // render current roll tag
-  void renderRollText(NVGcontext* vg) {
+  void renderRollText(NVGcontext* vg,float roll) {
     const int box_width = 33;
     const int angle_text_x = (pre_trans_x + width/2) - box_width;
     const int angle_text_y = pre_trans_y + height;
 
-    const float deg_roll = convertRadToDeg(attitude.roll);
+    const float deg_roll = convertRadToDeg(roll);
     nvgBeginPath(vg);
     nvgRect(vg, angle_text_x, angle_text_y, box_width, 20);
     nvgStrokeColor(vg, nvgRGBA(255,255,255,255));
@@ -308,13 +311,13 @@ private:
   }
 
   // render a marker line
-  void renderAngleLine(NVGcontext* vg, int angle) {
+  void renderAngleLine(NVGcontext* vg, int angle,float pitch) {
     const int line_length = 50; // in pixels
     const int marker_spacing = 10; // in pixels
 
 
     const int middle_y = pre_trans_y + (height/2);
-    const int calculated_y = middle_y + ( (convertRadToDeg(attitude.pitch)-angle) * marker_spacing);
+    const int calculated_y = middle_y + ( (convertRadToDeg(pitch)-angle) * marker_spacing);
 
 
     // first line
@@ -352,12 +355,12 @@ private:
   }
 
   // renders the marker lines for pitch
-  void renderPitchLines(NVGcontext* vg) {
+  void renderPitchLines(NVGcontext* vg,float pitch) {
     renderMiddleLine(vg);
 
     for (int i =0; i < pitch_markers_num; i++) {
-      int tmp_deg = ( ((pitch_markers_num/2) - i ) * pitch_markers_interval) + roundPitch(attitude.pitch);
-      renderAngleLine(vg,tmp_deg);
+      int tmp_deg = ( ((pitch_markers_num/2) - i ) * pitch_markers_interval) + roundPitch(pitch);
+      renderAngleLine(vg,tmp_deg,pitch);
     }
   }
 
@@ -392,7 +395,7 @@ public:
     if (current_anim_time <max_anim_time ) {
       current_anim_time += delta_time;
     }
-    str_attitude animated_attitude = interpolateAngles();
+    str_attitude animated_attitude = interpolateAttitide();
 
     // render compass before translation
 
@@ -401,8 +404,8 @@ public:
     nvgRotate(vg, animated_attitude.roll);
 
     //renderBorder(vg);
-    renderRollText(vg);
-    renderPitchLines(vg);
+    renderRollText(vg,animated_attitude.roll);
+    renderPitchLines(vg,animated_attitude.pitch);
   }
 
   void updateDelta(float delta_roll ,float delta_pitch) {
