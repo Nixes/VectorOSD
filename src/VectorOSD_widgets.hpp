@@ -285,9 +285,7 @@ private:
     float difference_pitch = attitude.pitch - previous_attitude.pitch;
     float difference_yaw = attitude.yaw - previous_attitude.yaw;
 
-    str_attitude animated_attitude = attitude;
-    printf("Current animation amount %f, current %f, max %f\n", animationAmount(current_anim_time,max_anim_time), current_anim_time, max_anim_time);
-
+    str_attitude animated_attitude;
     animated_attitude.roll = previous_attitude.roll + (difference_roll * animationAmount(current_anim_time,max_anim_time) );
     animated_attitude.pitch = previous_attitude.pitch + (difference_pitch * animationAmount(current_anim_time,max_anim_time) );
 
