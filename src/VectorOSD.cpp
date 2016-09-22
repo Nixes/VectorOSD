@@ -102,7 +102,7 @@ void requestFastUpdate() {
 	mavlink_message_t msg;
 	mavlink_message_interval_t interval;
 
-	interval.interval_us = 500000; // a ~60hz update rate in microseconds 16666
+	interval.interval_us = 16666; // a ~60hz update rate in microseconds 16666
 	interval.message_id = MAVLINK_MSG_ID_ATTITUDE;
 
 	mavlink_msg_message_interval_encode(255, 200, &msg, &interval);
@@ -118,7 +118,7 @@ bool openSerialPort(char* port_name) {
   sp_return error = sp_get_port_by_name(port_name,&port);
   if (error == SP_OK) {
     sp_set_baudrate(port,57600);
-    error = sp_open(port,SP_MODE_READ);
+    error = sp_open(port,SP_MODE_READ_WRITE);
     if (error == SP_OK) {
       return true;
     } else {
