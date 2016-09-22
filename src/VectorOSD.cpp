@@ -239,7 +239,7 @@ void render(NVGcontext* vg, double delta_time) {
 	bearing_indicator.render(vg);
 	//drawGlyph(vg,glyph_power);
 
-	attitude_indicator.render(vg); // attitude indicator must be the last thing to render as it does some complex transformations
+	attitude_indicator.render(vg,delta_time); // attitude indicator must be the last thing to render as it does some complex transformations
 }
 
 void init() {
