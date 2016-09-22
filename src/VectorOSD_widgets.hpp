@@ -266,29 +266,33 @@ private:
     float yaw;
   };
 
-  str_attitude previous_attidude;
+  str_attitude previous_attitude;
   str_attitude attitude;
 
   // animation variables
   double max_anim_time; // in seconds
   double current_anim_time;
 
+  // past update times, used for automatic calculation of max_anim_time
+  double update_times[3];
+
   // settings for drawing pitch scale
-  const int pitch_markers_num = 10; // how many pitch marker lines to show
+  const int pitch_markers_num = 8; // how many pitch marker lines to show
   const int pitch_markers_interval = 5; // draw every 5 degrees
 
   str_attitude interpolateAngles() {
-    double difference_roll = attitude.roll - previous_attidude.roll;
-    double difference_pitch = attitude.pitch - previous_attidude.pitch;
-    double difference_yaw = attitude.yaw - previous_attidude.yaw;
+    float difference_roll = attitude.roll - previous_attitude.roll;
+    float difference_pitch = attitude.pitch - previous_attitude.pitch;
+    float difference_yaw = attitude.yaw - previous_attitude.yaw;
 
-
-    double animated_roll = previous_attidude.roll + (difference_roll * animationAmount(current_anim_time,max_anim_time) );
-
+    str_attitude animated_attitude = attitude;
+    printf("Current animation amount %f, current %f, max %f\n", animationAmount(current_anim_time,max_anim_time), current_anim_time, max_anim_time);
+    animated_attitude.roll = previous_attitude.roll + (difference_roll * animationAmount(current_anim_time,max_anim_time) );
+    return animated_attitude;
   }
 
   // render current roll tag
-  void renderAngleText(NVGcontext* vg) {
+  void renderRollText(NVGcontext* vg) {
     const int box_width = 33;
     const int angle_text_x = (pre_trans_x + width/2) - box_width;
     const int angle_text_y = pre_trans_y + height;
@@ -342,17 +346,17 @@ private:
   }
 
   // round down pitch based on pitch marker interval
-  int roundedPitch() {
-    int pitch_deg = convertRadToDeg(attitude.pitch);
+  int roundPitch(float pitch) {
+    int pitch_deg = convertRadToDeg(pitch);
     return pitch_deg - pitch_deg % pitch_markers_interval;
   }
 
   // renders the marker lines for pitch
-  void renderAngleLines(NVGcontext* vg) {
+  void renderPitchLines(NVGcontext* vg) {
     renderMiddleLine(vg);
 
     for (int i =0; i < pitch_markers_num; i++) {
-      int tmp_deg = ( ((pitch_markers_num/2) - i ) * pitch_markers_interval) + roundedPitch();
+      int tmp_deg = ( ((pitch_markers_num/2) - i ) * pitch_markers_interval) + roundPitch(attitude.pitch);
       renderAngleLine(vg,tmp_deg);
     }
   }
@@ -374,7 +378,11 @@ public:
     pre_trans_y = 0 - (height / 2);
     attitude.roll = 0;
     attitude.pitch = 0;
-    max_anim_time = 0.25;
+    attitude.yaw = 0;
+    update_times[0] = 0; update_times[1] = 0; update_times[2] = 0;
+
+    current_anim_time = 0.0;
+    max_anim_time = 0.10;
   }
   ~attitudeIndicator() {
 
@@ -384,15 +392,17 @@ public:
     if (current_anim_time <max_anim_time ) {
       current_anim_time += delta_time;
     }
+    str_attitude animated_attitude = interpolateAngles();
+
     // render compass before translation
 
     // TODO: merge translation and rotation into one operation
     nvgTranslate(vg,x + width/2, y + height/2);
-    nvgRotate(vg, attitude.roll);
+    nvgRotate(vg, animated_attitude.roll);
 
     //renderBorder(vg);
-    renderAngleText(vg);
-    renderAngleLines(vg);
+    renderRollText(vg);
+    renderPitchLines(vg);
   }
 
   void updateDelta(float delta_roll ,float delta_pitch) {
@@ -400,10 +410,12 @@ public:
     attitude.pitch+= delta_pitch;
   }
   void update(float tmp_roll, float tmp_pitch) {
+    previous_attitude = attitude;
+
     attitude.roll = tmp_roll;
     attitude.pitch = tmp_pitch;
 
-    max_anim_time = current_anim_time;
+    //max_anim_time = current_anim_time;
     current_anim_time = 0;
   }
 };
