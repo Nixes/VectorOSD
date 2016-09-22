@@ -142,7 +142,7 @@ private:
   const NVGcolor severe_colour = nvgRGBA(255,150,150,100);
 
   // animation variables
-  const double anim_time = 0.5; // 500ms
+  const double max_anim_time = 0.5; // 500ms
   double current_anim_time;
 
   // battery voltages
@@ -195,7 +195,7 @@ private:
 
   void renderBatteryBar(NVGcontext* vg) {
     double difference_battery_amount = battery_amount - previous_battery_amount ;
-    double animated_battery_amount = previous_battery_amount + (difference_battery_amount * animationAmount(current_anim_time,anim_time) );
+    double animated_battery_amount = previous_battery_amount + (difference_battery_amount * animationAmount(current_anim_time,max_anim_time) );
     unsigned int calculated_width = animated_battery_amount * width;
 
     //printf("DEBUG: difference_battery_amount %f animated_difference %f animated_battery_amount %f calculated_width %i\n", difference_battery_amount,animated_difference, animated_battery_amount,calculated_width);
@@ -231,7 +231,7 @@ public:
 
   }
   void render(NVGcontext* vg, double delta_time) {
-    if (current_anim_time < anim_time) {
+    if (current_anim_time <max_anim_time ) {
       current_anim_time += delta_time;
     }
     renderBatteryBox(vg);
