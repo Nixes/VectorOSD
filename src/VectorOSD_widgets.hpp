@@ -432,13 +432,65 @@ private:
   const unsigned int height = 20;
   const unsigned int width = 400;
 
+  // number of bearing markers to render
+  const int bearing_markers_num = 6;
+  const int bearing_markers_interval = 5; // draw every 5 degrees
+
   // bearing
   float bearing; // in radians
 
-  void renderBearingMarkers() {
-      // render N, S, E ,W
+  void renderBearingMarker(NVGcontext* vg, int marker_angle,float bearing) {
+    const int line_length = 50; // in pixels
+    const int marker_spacing = 10; // in pixels
 
-      // render NW, NE , SW, SE
+
+    const int middle_x = x + (width/2);
+    const int calculated_x = middle_x + ( (convertRadToDeg(bearing)-marker_angle) * marker_spacing);
+
+    nvgBeginPath(vg);
+    nvgMoveTo(vg,calculated_x , y);
+    nvgLineTo(vg,calculated_x, y + height);
+    nvgFillColor(vg, nvgRGBA(255,255,255,255));
+    nvgFill(vg);
+
+    /*
+    Only render text if marker angle matches one of these values, just do a giant case switch
+      large icons
+          N = 0/360
+          E = 90
+          S = 180
+          W = 270
+      smaller icons
+          NW, NE , SW, SE
+    */
+    renderNumber(vg, calculated_x, y + height, marker_angle);
+  }
+
+  // render center line
+  void renderMiddleLine(NVGcontext* vg) {
+    unsigned int center_x = x + width/2;
+
+    nvgBeginPath(vg);
+    nvgMoveTo(vg,center_x,y);
+    nvgLineTo(vg,center_x,y + height);
+    nvgFillColor(vg, nvgRGBA(255,255,255,255));
+    nvgFill(vg);
+  }
+
+  // round down bearing based on bearing marker interval
+  int roundBearing(float bearing) {
+    int bearing_deg = convertRadToDeg(bearing);
+    return bearing_deg - bearing_deg % bearing_markers_interval;
+  }
+
+
+  void renderBearingMarkers(NVGcontext* vg,float bearing) {
+    renderMiddleLine(vg);
+
+    for (int i =0; i < bearing_markers_num; i++) {
+      int tmp_deg = ( ((bearing_markers_num/2) - i ) * bearing_markers_interval) + roundBearing(bearing);
+      renderBearingMarker(vg,tmp_deg,bearing);
+    }
   }
 
   void renderBearingNum(NVGcontext* vg) {
@@ -461,6 +513,7 @@ public:
   void render(NVGcontext* vg) {
     renderBorder(vg);
     renderBearingNum(vg);
+    renderBearingMarkers(vg, bearing);
   }
   void update(float tmp_bearing) {
     bearing += tmp_bearing;
