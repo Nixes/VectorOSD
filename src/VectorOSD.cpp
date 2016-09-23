@@ -1,4 +1,5 @@
 //#define USING_GLES
+#define DISABLE_SERIAL
 
 #include <stdio.h>
 
@@ -248,15 +249,17 @@ void init() {
 }
 
 int main(int argc, char* args[] ) {
-	if (argc < 2) {
-		printf("You must specify a serial port to obtain telemetry data\n");
-		exit(1);
-	}
+	#ifndef DISABLE_SERIAL
+		if (argc < 2) {
+			printf("You must specify a serial port to obtain telemetry data\n");
+			exit(1);
+		}
 
-	if (!openSerialPort(args[1]) ) {
-		exit(1);
-	}
-	requestFastUpdate();
+		if (!openSerialPort(args[1]) ) {
+			exit(1);
+		}
+		requestFastUpdate();
+	#endif
 
 	GLFWwindow* window;
 	NVGcontext* vg = NULL;
@@ -349,7 +352,10 @@ int main(int argc, char* args[] ) {
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
+		#ifndef DISABLE_SERIAL
 		readMav();
+		#endif
 	}
 
 	sp_close(port); // close serial port
