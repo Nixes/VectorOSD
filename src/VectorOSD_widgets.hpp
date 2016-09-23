@@ -5,6 +5,10 @@
 using std::string;
 const long double PI = 3.141592653589793238L;
 
+void renderArrow() {
+
+}
+
 // TODO OPTIMISATION: streamline branching
 double animationAmount(double tmp_current_time,double tmp_total_time) {
   double animation_amount =  tmp_current_time / tmp_total_time ;
@@ -433,23 +437,24 @@ private:
   const unsigned int width = 400;
 
   // number of bearing markers to render
-  const int bearing_markers_num = 6;
+  const int bearing_markers_num = 5;
   const int bearing_markers_interval = 5; // draw every 5 degrees
 
   // bearing
   float bearing; // in radians
 
+  // marker_angle is in degrees, bearing is in radians
   void renderBearingMarker(NVGcontext* vg, int marker_angle,float bearing) {
-    const int line_length = 50; // in pixels
+    const int line_height = 5; // in pixels
     const int marker_spacing = 10; // in pixels
 
-
+    const float bearing_deg = convertRadToDeg(bearing);
     const int middle_x = x + (width/2);
-    const int calculated_x = middle_x + ( (convertRadToDeg(bearing)-marker_angle) * marker_spacing);
+    const int calculated_x = middle_x + ( (bearing_deg-marker_angle) * marker_spacing);
 
     nvgBeginPath(vg);
     nvgMoveTo(vg,calculated_x , y);
-    nvgLineTo(vg,calculated_x, y + height);
+    nvgLineTo(vg,calculated_x, y + line_height);
     nvgFillColor(vg, nvgRGBA(255,255,255,255));
     nvgFill(vg);
 
@@ -463,7 +468,27 @@ private:
       smaller icons
           NW, NE , SW, SE
     */
-    renderNumber(vg, calculated_x, y + height, marker_angle);
+    switch(marker_angle) {
+      case 0:
+        renderText(vg, calculated_x - 10, y + line_height, "N");
+        break;
+      case 360:
+        renderText(vg, calculated_x - 10, y + line_height, "N");
+        break;
+
+      case 90:
+        renderText(vg, calculated_x - 10, y + line_height, "E");
+        break;
+
+      case 180:
+        renderText(vg, calculated_x - 10, y + line_height, "S");
+        break;
+
+      case 270:
+        renderText(vg, calculated_x - 10, y + line_height, "W");
+        break;
+    }
+    //renderNumber(vg, calculated_x, y + height, marker_angle);
   }
 
   // render center line
@@ -475,6 +500,8 @@ private:
     nvgLineTo(vg,center_x,y + height);
     nvgFillColor(vg, nvgRGBA(255,255,255,255));
     nvgFill(vg);
+
+    renderNumber(vg,center_x-10,y + height, (int)convertRadToDeg(bearing) );
   }
 
   // round down bearing based on bearing marker interval
@@ -493,10 +520,6 @@ private:
     }
   }
 
-  void renderBearingNum(NVGcontext* vg) {
-    renderNumber(vg,x,y, (int)convertRadToDeg(bearing) );
-  }
-
   void renderBorder(NVGcontext* vg) {
     nvgBeginPath(vg);
     nvgRect(vg, x, y, width, height);
@@ -512,7 +535,6 @@ public:
   }
   void render(NVGcontext* vg) {
     renderBorder(vg);
-    renderBearingNum(vg);
     renderBearingMarkers(vg, bearing);
   }
   void update(float tmp_bearing) {
