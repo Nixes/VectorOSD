@@ -14,7 +14,7 @@
 #ifdef NANOVG_GLEW
 	#include <GL/glew.h>
 #endif
-// some building conditionals based on if we are using opengles of opengl
+// some building conditionals based on if we are using opengles or opengl
 #ifdef USING_GLES
 	#define NANOVG_GLES2_IMPLEMENTATION
 	#define GLFW_INCLUDE_ES2
@@ -78,6 +78,7 @@ void readMav() {
             mavlink_vfr_hud_t vfr_packet;
             mavlink_msg_vfr_hud_decode(&msg, &vfr_packet);
             printf("Current heading %i\n",vfr_packet.heading);
+						bearing_indicator.update(nvgDegToRad(vfr_packet.heading));
           break;
 
           case MAVLINK_MSG_ID_ATTITUDE:
