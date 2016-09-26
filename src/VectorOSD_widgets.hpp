@@ -315,11 +315,11 @@ private:
   // render a marker line
   void renderAngleLine(NVGcontext* vg, int angle,float pitch) {
     const int line_length = 50; // in pixels
-    const int marker_spacing = 10; // in pixels
+    const int marker_spacing = 50; // in pixels
 
 
     const int middle_y = pre_trans_y + (height/2);
-    const int calculated_y = middle_y + ( (convertRadToDeg(pitch)-angle) * marker_spacing);
+    const int calculated_y = middle_y + ( (convertRadToDeg(pitch)-angle) * (marker_spacing / pitch_markers_interval) );
 
 
     // first line
@@ -438,7 +438,7 @@ private:
 
   // number of bearing markers to render
   int bearing_markers_num;
-  const int bearing_marker_spacing = 10; // in pixels
+  const int bearing_marker_spacing = 15; // in pixels
   const int bearing_markers_interval = 5; // draw every 5 degrees
 
   // bearing
