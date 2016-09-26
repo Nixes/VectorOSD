@@ -281,8 +281,9 @@ private:
   double update_times[3];
 
   // settings for drawing pitch scale
-  const int pitch_markers_num = 8; // how many pitch marker lines to show
+  int pitch_markers_num; // how many pitch marker lines to show
   const int pitch_markers_interval = 5; // draw every 5 degrees
+  const int pitch_markers_spacing = 50; // in pixels
 
   str_attitude interpolateAttitide() {
     float difference_roll = attitude.roll - previous_attitude.roll;
@@ -315,11 +316,9 @@ private:
   // render a marker line
   void renderAngleLine(NVGcontext* vg, int angle,float pitch) {
     const int line_length = 50; // in pixels
-    const int marker_spacing = 50; // in pixels
-
 
     const int middle_y = pre_trans_y + (height/2);
-    const int calculated_y = middle_y + ( (convertRadToDeg(pitch)-angle) * (marker_spacing / pitch_markers_interval) );
+    const int calculated_y = middle_y + ( (convertRadToDeg(pitch)-angle) * (pitch_markers_spacing / pitch_markers_interval) );
 
 
     // first line
@@ -388,6 +387,9 @@ public:
 
     current_anim_time = 0.0;
     max_anim_time = 0.10;
+
+    // calulate number of bearing markers required to fill the width provided
+    pitch_markers_num = width / pitch_markers_spacing;
   }
   ~attitudeIndicator() {
 
@@ -405,7 +407,7 @@ public:
     nvgTranslate(vg,x + width/2, y + height/2);
     nvgRotate(vg, animated_attitude.roll);
 
-    //renderBorder(vg);
+    renderBorder(vg);
     renderRollText(vg,animated_attitude.roll);
     renderPitchLines(vg,animated_attitude.pitch);
   }
