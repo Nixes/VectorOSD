@@ -78,7 +78,7 @@ void readMav() {
             mavlink_vfr_hud_t vfr_packet;
             mavlink_msg_vfr_hud_decode(&msg, &vfr_packet);
             printf("Current heading %i\n",vfr_packet.heading);
-						bearing_indicator.update(nvgDegToRad(vfr_packet.heading));
+						bearing_indicator.update(vfr_packet.heading);
           break;
 
           case MAVLINK_MSG_ID_ATTITUDE:
@@ -226,10 +226,10 @@ static void debugKeys(GLFWwindow* window, int key, int scancode, int action, int
 
 	// compass debug keys
 	if (key == GLFW_KEY_Q && action != GLFW_RELEASE) {
-		bearing_indicator.update(0.01);
+		bearing_indicator.updateDelta(0.5);
 	}
 	if (key == GLFW_KEY_E && action != GLFW_RELEASE) {
-		bearing_indicator.update(-0.01);
+		bearing_indicator.updateDelta(-0.5);
 	}
 }
 

@@ -437,20 +437,21 @@ private:
   const unsigned int width = 400;
 
   // number of bearing markers to render
-  const int bearing_markers_num = 5;
+  int bearing_markers_num;
+  const int bearing_marker_spacing = 10; // in pixels
   const int bearing_markers_interval = 5; // draw every 5 degrees
 
   // bearing
-  float bearing; // in radians
+  float bearing; // in degrees, 0-359
 
   // marker_angle is in degrees, bearing is in radians
   void renderBearingMarker(NVGcontext* vg, int marker_angle,float bearing) {
     const int line_height = 5; // in pixels
-    const int marker_spacing = 10; // in pixels
 
-    const float bearing_deg = convertRadToDeg(bearing);
+
+    const float bearing_deg = bearing;
     const int middle_x = x + (width/2);
-    const int calculated_x = middle_x + ( (bearing_deg-marker_angle) * marker_spacing);
+    const int calculated_x = middle_x + ( (bearing_deg-marker_angle) * ( bearing_marker_spacing / bearing_markers_interval ) );
 
     nvgBeginPath(vg);
     nvgMoveTo(vg,calculated_x , y);
@@ -501,12 +502,12 @@ private:
     nvgFillColor(vg, nvgRGBA(255,255,255,255));
     nvgFill(vg);
 
-    renderNumber(vg,center_x-10,y + height, (int)convertRadToDeg(bearing) );
+    renderNumber(vg,center_x-10,y + height, (int)bearing );
   }
 
   // round down bearing based on bearing marker interval
   int roundBearing(float bearing) {
-    int bearing_deg = convertRadToDeg(bearing);
+    int bearing_deg = bearing;
     return bearing_deg - bearing_deg % bearing_markers_interval;
   }
 
@@ -532,13 +533,25 @@ public:
       x = temp_x;
       y = temp_y;
       bearing = 0;
+
+      // calulate number of bearing markers required to fill the width provided
+      bearing_markers_num = width / ( bearing_marker_spacing*4 );
   }
   void render(NVGcontext* vg) {
     renderBorder(vg);
     renderBearingMarkers(vg, bearing);
   }
+  void updateDelta(float tmp_bearing) {
+    float tmp_modified_bearing = bearing + tmp_bearing;
+    if (tmp_modified_bearing > 0 && tmp_modified_bearing < 360) {
+      bearing = tmp_modified_bearing;
+    }
+  }
+  // accepts bearing in degrees
   void update(float tmp_bearing) {
-    bearing += tmp_bearing;
+    if (tmp_bearing > 0 && tmp_bearing < 360) {
+      bearing = tmp_bearing;
+    }
   }
 };
 
