@@ -535,7 +535,7 @@ public:
       bearing = 0;
 
       // calulate number of bearing markers required to fill the width provided
-      bearing_markers_num = width / ( bearing_marker_spacing*4 );
+      bearing_markers_num = width / bearing_marker_spacing ;
   }
   void render(NVGcontext* vg) {
     renderBorder(vg);
