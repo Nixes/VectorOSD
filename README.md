@@ -34,27 +34,9 @@ make
 
 #Windows MSYS Instructions (x86-64)
 
-Install GCC
+Install Dependencies
 ```
-pacman -S mingw-w64-x86_64-gcc
-```
-
-
-Install Make
-```
-pacman -S make
-```
-
-
-Install GLEW
-```
-pacman -S mingw-w64-x86_64-glew
-```
-
-
-Install glfw
-```
-pacman -S mingw-w64-x86_64-glfw
+pacman -S mingw-w64-x86_64-gcc make mingw-w64-x86_64-glew mingw-w64-x86_64-glfw
 ```
 
 Clone repo
