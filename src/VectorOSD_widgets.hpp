@@ -446,6 +446,18 @@ private:
   // bearing
   float bearing; // in degrees, 0-359
 
+  // converts negative values to positive bearings in the other direction
+  int rollBearing(int input_bearing) {
+    // -10 = 350
+    // -20 = 340
+    if (bearing < 0) {
+      const int max_deg = 360;
+      return input_bearing + max_deg;
+    } else {
+      return input_bearing;
+    }
+  }
+
   // marker_angle is in degrees, bearing is in radians
   void renderBearingMarker(NVGcontext* vg, int marker_angle,float bearing) {
     const int line_height = 5; // in pixels
@@ -471,7 +483,8 @@ private:
       smaller icons
           NW, NE , SW, SE
     */
-    switch(marker_angle) {
+    const int wrapped_marker_angle = rollBearing(marker_angle);
+    switch(wrapped_marker_angle) {
       case 0:
         renderText(vg, calculated_x - 10, y + line_height, "N");
         break;
@@ -504,7 +517,7 @@ private:
     nvgFillColor(vg, nvgRGBA(255,255,255,255));
     nvgFill(vg);
 
-    renderNumber(vg,center_x-10,y + height, (int)bearing );
+    renderNumber(vg,center_x-10,y + height, rollBearing( (int)bearing ) );
   }
 
   // round down bearing based on bearing marker interval
@@ -545,7 +558,7 @@ public:
   }
   void updateDelta(float tmp_bearing) {
     float tmp_modified_bearing = bearing + tmp_bearing;
-    if (tmp_modified_bearing > 0 && tmp_modified_bearing < 360) {
+    if (tmp_modified_bearing < 360) {
       bearing = tmp_modified_bearing;
     }
   }
