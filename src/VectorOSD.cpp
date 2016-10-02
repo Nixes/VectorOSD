@@ -1,5 +1,5 @@
 //#define USING_GLES
-#define DISABLE_SERIAL
+#define SERIAL_ENABLED
 
 #include <stdio.h>
 
@@ -226,10 +226,10 @@ static void debugKeys(GLFWwindow* window, int key, int scancode, int action, int
 
 	// compass debug keys
 	if (key == GLFW_KEY_Q && action != GLFW_RELEASE) {
-		bearing_indicator.updateDelta(0.5);
+		bearing_indicator.updateDelta(-0.5);
 	}
 	if (key == GLFW_KEY_E && action != GLFW_RELEASE) {
-		bearing_indicator.updateDelta(-0.5);
+		bearing_indicator.updateDelta(0.5);
 	}
 }
 
@@ -250,7 +250,7 @@ void init() {
 }
 
 int main(int argc, char* args[] ) {
-	#ifndef DISABLE_SERIAL
+	#ifdef SERIAL_ENABLED
 		if (argc < 2) {
 			printf("You must specify a serial port to obtain telemetry data\n");
 			exit(1);
@@ -258,6 +258,8 @@ int main(int argc, char* args[] ) {
 
 		if (!openSerialPort(args[1]) ) {
 			exit(1);
+		} else {
+			printf("Successfully connected to serial device\n");
 		}
 		requestFastUpdate();
 	#endif
@@ -354,7 +356,7 @@ int main(int argc, char* args[] ) {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 
-		#ifndef DISABLE_SERIAL
+		#ifdef SERIAL_ENABLED
 		readMav();
 		#endif
 	}
