@@ -462,10 +462,9 @@ private:
   void renderBearingMarker(NVGcontext* vg, int marker_angle,float bearing) {
     const int line_height = 5; // in pixels
 
-
     const float bearing_deg = bearing;
     const int middle_x = x + (width/2);
-    const int calculated_x = middle_x + ( (bearing_deg-marker_angle) * ( bearing_marker_spacing / bearing_markers_interval ) );
+    const int calculated_x = middle_x + ( (marker_angle-bearing_deg) * ( bearing_marker_spacing / bearing_markers_interval ) );
 
     nvgBeginPath(vg);
     nvgMoveTo(vg,calculated_x , y);
@@ -504,7 +503,6 @@ private:
         renderText(vg, calculated_x - 10, y + line_height, "W");
         break;
     }
-    //renderNumber(vg, calculated_x, y + height, marker_angle);
   }
 
   // render center line
