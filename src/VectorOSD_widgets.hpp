@@ -335,6 +335,17 @@ private:
     nvgFillColor(vg, nvgRGBA(255,255,255,255));
     nvgFill(vg);
 
+    switch(angle) {
+      case 0:
+        // render horizon line
+        nvgBeginPath(vg);
+        nvgMoveTo(vg,pre_trans_x , calculated_y);
+        nvgLineTo(vg,pre_trans_x + width, calculated_y);
+        nvgFillColor(vg, nvgRGBA(255,255,255,255));
+        nvgFill(vg);
+        break;
+    }
+
     renderNumber(vg, pre_trans_x + width, calculated_y - 10, angle);
   }
 
