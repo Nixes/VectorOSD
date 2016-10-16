@@ -1,5 +1,5 @@
 //#define USING_GLES
-//#define SERIAL_ENABLED
+#define SERIAL_ENABLED
 
 #include <stdio.h>
 
@@ -234,6 +234,7 @@ static void debugKeys(GLFWwindow* window, int key, int scancode, int action, int
 // actually render the objects
 void render(NVGcontext* vg, double delta_time) {
 	//printf("Delta_time: %f\n",delta_time );
+	rx_stats.render(vg,delta_time);
 	log_box.render(vg,delta_time);
 	power_stats.render(vg,delta_time);
 	bearing_indicator.render(vg);

@@ -59,7 +59,7 @@ private:
   unsigned int y;
 
   double time_since_beat;
-  const double beat_interval = 1;
+  const double beat_interval = 1; // in seconds
 
   bool isConnected;
 
