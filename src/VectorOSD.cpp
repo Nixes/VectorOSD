@@ -67,6 +67,7 @@ void readMav() {
         switch(msg.msgid) {
           case MAVLINK_MSG_ID_HEARTBEAT: {
             printf("   Got Heartbeat\n");
+						rx_stats.beat();
           }
           break;
 
