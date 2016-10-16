@@ -59,8 +59,17 @@ private:
   unsigned int y;
 
   double time_since_beat;
+  const double beat_interval = 1;
 
   bool isConnected;
+
+  void checkConnected () {
+    if (time_since_beat > beat_interval) {
+      isConnected = false;
+    } else {
+      isConnected = true;
+    }
+  }
 
 public:
   rxStats (unsigned int temp_x,unsigned int temp_y) {
@@ -80,6 +89,7 @@ public:
 
   void render(NVGcontext* vg, double delta_time) {
     time_since_beat += delta_time;
+    checkConnected();
     if (isConnected) {
       renderText(vg, x, y, "Connected");
     } else {
