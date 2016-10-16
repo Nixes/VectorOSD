@@ -1,5 +1,5 @@
 //#define USING_GLES
-#define SERIAL_ENABLED
+//#define SERIAL_ENABLED
 
 #include <stdio.h>
 
@@ -52,10 +52,6 @@ struct sp_port *port;
 void errorcb(int error, const char* desc) {
 	printf("GLFW error %d: %s\n", error, desc);
 }
-
-int blowup = 0;
-int premult = 0;
-
 
 void readMav() {
   mavlink_message_t msg;
@@ -340,10 +336,7 @@ int main(int argc, char* args[] ) {
 
 		// Update and render
 		glViewport(0, 0, fbWidth, fbHeight);
-		if (premult)
-			glClearColor(0,0,0,0);
-		else
-			glClearColor(0.3f, 0.3f, 0.32f, 1.0f);
+		glClearColor(0.3f, 0.3f, 0.32f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
 
 		nvgBeginFrame(vg, winWidth, winHeight, pxRatio);
