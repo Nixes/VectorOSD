@@ -50,6 +50,45 @@ float convertRadToDeg(float radians) {
   return radians * 180.0 / PI;
 };
 
+class rxStats {
+private:
+  const unsigned int height = 30;
+  const unsigned int width = 60;
+
+  unsigned int x;
+  unsigned int y;
+
+  double time_since_beat;
+
+  bool isConnected;
+
+public:
+  rxStats (unsigned int temp_x,unsigned int temp_y) {
+    x = temp_x;
+    y = temp_y;
+    isConnected = false;
+    time_since_beat = 0;
+  }
+
+  void beat() {
+    time_since_beat = 0;
+  }
+
+  void update() {
+
+  }
+
+  void render(NVGcontext* vg, double delta_time) {
+    time_since_beat += delta_time;
+    if (isConnected) {
+      renderText(vg, x, y, "Connected");
+    } else {
+      renderText(vg, x, y, "Disconnected");
+    }
+
+  }
+};
+
 class logBox {
 private:
   const unsigned int padding = 10;

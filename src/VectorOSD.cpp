@@ -42,6 +42,7 @@ struct NSVGimage* glyph_armed = NULL;
 
 // initialise widgets
 logBox log_box(300,0);
+rxStats rx_stats(0,0);
 powerStats power_stats(50,550);
 attitudeIndicator attitude_indicator(300,50);
 bearingIndicator bearing_indicator(300,10);
