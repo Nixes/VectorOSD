@@ -39,6 +39,15 @@ Install Dependencies
 pacman -S mingw-w64-x86_64-gcc make mingw-w64-x86_64-glew mingw-w64-x86_64-glfw
 ```
 
+Install libserialport
+```
+pacman -S base-devel
+git clone git://sigrok.org/libserialport
+./autogen.sh
+./configure
+make install
+```
+
 Clone repo
 ```
 git clone --recursive https://github.com/Nixes/VectorOSD.git
