@@ -117,9 +117,9 @@ bool openSerialPort(char* port_name) {
   printf("Opening port '%s' \n", port_name);
   sp_return error = sp_get_port_by_name(port_name,&port);
   if (error == SP_OK) {
-    sp_set_baudrate(port,57600);
     error = sp_open(port,SP_MODE_READ_WRITE);
     if (error == SP_OK) {
+      sp_set_baudrate(port,57600);
       return true;
     } else {
       printf("Error opening serial device\n");
